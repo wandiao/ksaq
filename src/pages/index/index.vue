@@ -2,12 +2,14 @@
   <div class="home container">
     <div class="tr">
       <div class="th">设备类型</div>
+      <div class="th">Addr</div>
       <div class="th">link</div>
       <div class="th">监控值</div>
     </div>
     <ul class="tb">
       <li v-for="(item, index) in list" :key="index" class="tr">
         <div class="td"><img class="icon" :src="iconMap[item.SensorName]"/>{{item.SensorName}}</div>
+        <div class="td">{{item.SensorAddr}}</div>
         <div class="td"><img class="icon" :src="iconMap[item.LinkState]"/></div>
         <div class="td">{{item.Value || '--'}}</div>
       </li>
@@ -30,7 +32,12 @@
     读卡器: '/static/images/common/card.png',
     甲烷低浓度: '/static/images/common/ch4.png',
     广播终端: '/static/images/common/boardcast.png',
-
+    氧气: '/static/images/common/o2.png',
+    一氧化碳: '/static/images/common/co.png',
+    粉尘: '/static/images/common/drug.png',
+    语音风门: '/static/images/common/fengmen.png',
+    风筒: '/static/images/common/fengtong.png',
+    电源: '/static/images/common/power.png',
 
     连接正常: '/static/images/common/link.png',
     连接断开: '/static/images/common/linkbreak.png',
@@ -81,9 +88,10 @@
     .th, .td {
       position: relative;
       flex: 1;
-       text-align: center;
+      text-align: center;
+      font-size: 82%;
       padding: 18rpx 0;
-      padding-left: 25rpx;
+      padding-left: 5rpx;
       &:after {
         .hairline();
         border-bottom-width: 1rpx;
