@@ -74,15 +74,15 @@
 <style lang="less" scoped>
   @import '../../styles/mixin';
   .home {
-    padding: 30rpx;
+    padding: 20rpx;
   }
   .tr {
     display: flex;
     .th, .td {
       position: relative;
       flex: 1;
-      // text-align: center;
-      padding: 15rpx 0;
+       text-align: center;
+      padding: 18rpx 0;
       padding-left: 25rpx;
       &:after {
         .hairline();
@@ -90,7 +90,7 @@
       }
     }
     .th {
-      color: #58C8DC;
+      color: rgba(88, 200, 220, 0.63);
     }
     .td {
       &.warn {
