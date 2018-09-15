@@ -1,0 +1,29 @@
+{
+  "pages": [
+    "pages/index/main",
+    "pages/me/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#58C8DC",
+    "navigationBarTitleText": "矿山安全监控",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#666",
+    "selectedColor": "#58C8DC",
+    "backgroundColor": "#fff",
+    "borderStyle": "black",
+    "list": [{
+      "pagePath": "pages/index/main",
+      "text": "监控数据",
+      "iconPath": "static/images/tab-bar/ycmz.png",
+      "selectedIconPath": "static/images/tab-bar/ycmz-active.png"
+    }, {
+      "pagePath": "pages/me/main",
+      "text": "我的",
+      "iconPath": "static/images/tab-bar/wode.png",
+      "selectedIconPath": "static/images/tab-bar/wode-active.png"
+    }]
+  }
+}
