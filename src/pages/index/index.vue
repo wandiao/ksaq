@@ -10,9 +10,9 @@
     <ul class="tb">
       <li v-for="(item, index) in list" :key="index" class="tr">
         <div class="td"><img class="icon" :src="iconMap[item.SensorName]"/>{{item.SensorName}}</div>
-        <div class="td">{{item.SensorAddr}}</div>
-        <div class="td"><img class="icon" :src="iconMap[item.LinkState]"/></div>
-        <div class="td"><img class="icon" :src="iconMap[item.CanCode]"/></div>
+        <div class="td f0">{{item.SensorAddr}}</div>
+        <div class="td f0"><img class="icon" :src="iconMap[item.LinkState]"/></div>
+        <div class="td f0"><img class="icon" :src="iconMap[item.CanCode]"/></div>
         <div class="td">{{item.Value || '--'}}</div>
       </li>
     </ul>
@@ -95,7 +95,7 @@
     
     .th, .td {
       position: relative;
-      flex: 1;
+      flex: 2;
       text-align: center;
       font-size: 70%;
       padding: 18rpx 0;
@@ -104,9 +104,9 @@
         .hairline();
         border-bottom-width: 1rpx;
       }
-    .f0{
-      flex: none
     }
+    .f0{
+      flex: 1;
     }
     
     .th {
