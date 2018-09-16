@@ -1,16 +1,18 @@
 <template>
   <div class="home container">
     <div class="tr">
-      <div class="th">设备类型</div>
-      <div class="th">Addr</div>
-      <div class="th">link</div>
-      <div class="th">监控值</div>
+      <div class="th">Type</div>
+      <div class="th f0">Addr</div>
+      <div class="th f0">Link</div>
+      <div class="th f0">Can</div>
+      <div class="th">Value</div>
     </div>
     <ul class="tb">
       <li v-for="(item, index) in list" :key="index" class="tr">
         <div class="td"><img class="icon" :src="iconMap[item.SensorName]"/>{{item.SensorName}}</div>
         <div class="td">{{item.SensorAddr}}</div>
         <div class="td"><img class="icon" :src="iconMap[item.LinkState]"/></div>
+        <div class="td"><img class="icon" :src="iconMap[item.CanCode]"/></div>
         <div class="td">{{item.Value || '--'}}</div>
       </li>
     </ul>
@@ -38,6 +40,11 @@
     语音风门: '/static/images/common/fengmen.png',
     风筒: '/static/images/common/fengtong.png',
     电源: '/static/images/common/power.png',
+
+    C1: '/static/images/common/index1.png',
+    C2: '/static/images/common/index2.png',
+    C3: '/static/images/common/index3.png',
+    C4: '/static/images/common/index4.png',
 
     连接正常: '/static/images/common/link.png',
     连接断开: '/static/images/common/linkbreak.png',
@@ -73,7 +80,7 @@
             this.list = res.data.sensorBeans;
           },
         });
-      }, 2000);
+      }, 1000);
     },
   };
 </script>
@@ -85,20 +92,25 @@
   }
   .tr {
     display: flex;
+    
     .th, .td {
       position: relative;
       flex: 1;
       text-align: center;
-      font-size: 82%;
+      font-size: 70%;
       padding: 18rpx 0;
       padding-left: 5rpx;
       &:after {
         .hairline();
         border-bottom-width: 1rpx;
       }
+    .f0{
+      flex: none
     }
+    }
+    
     .th {
-      color: rgba(88, 200, 220, 0.63);
+      color: #4e76e2cb;
     }
     .td {
       &.warn {
