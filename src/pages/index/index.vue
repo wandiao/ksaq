@@ -1,20 +1,20 @@
 <template>
   <div class="home container">
-    <div class="tr">
+    <button class="tr">
       <div class="th">Type</div>
       <div class="th f0">Addr</div>
       <div class="th f0">Link</div>
       <div class="th f0">Can</div>
       <div class="th">Value</div>
-    </div>
+    </button>
     <ul class="tb">
-      <li v-for="(item, index) in list" :key="index" class="tr">
+      <button  v-for="(item, index) in list" :key="index" class="tr">
         <div class="td"><img class="icon" :src="iconMap[item.SensorName]"/>{{item.SensorName}}</div>
         <div class="td f0">{{item.SensorAddr}}</div>
         <div class="td f0"><img class="icon" :src="iconMap[item.LinkState]"/></div>
         <div class="td f0"><img class="icon" :src="iconMap[item.CanCode]"/></div>
         <div class="td">{{item.Value || '--'}}</div>
-      </li>
+      </button>
     </ul>
   </div>
 </template>
@@ -92,13 +92,13 @@
   }
   .tr {
     display: flex;
-    
+    height: 70rpx;
     .th, .td {
       position: relative;
       flex: 2;
-      text-align: center;
-      font-size: 70%;
-      padding: 18rpx 0;
+      //text-align: center;
+      font-size: 75%;
+      padding: 0rpx 0;
       padding-left: 5rpx;
       &:after {
         .hairline();
