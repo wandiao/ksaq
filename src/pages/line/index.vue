@@ -1,6 +1,6 @@
 <template>
   <div class="counter-warp">
-    <div class="container">
+    <div class="container df-ct">
       <ec-canvas class="canvas" id="mychart-dom-bar" canvas-id="mychart-bar" :ec="ec"></ec-canvas>
     </div>
   </div>
@@ -121,9 +121,19 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
+.df-ct {
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:space-between;
+  padding:200rpx 0;
+  box-sizing:border-box;
+
+}
 ec-canvas {
-  width: 400px;
-  height: 400px;
+  width: 100%;
+  height: 800rpx;
 }
 </style>

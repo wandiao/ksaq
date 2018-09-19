@@ -21,6 +21,7 @@ export default {
       // 调用登录接口
       wx.login({
         success: () => {
+          console.log(1);
           wx.getUserInfo({
             success: (res) => {
               this.userInfo = res.userInfo;
