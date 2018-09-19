@@ -1,7 +1,8 @@
 {
   "pages": [
     "pages/index/main",
-    "pages/me/main"
+    "pages/me/main",
+    "pages/line/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -24,6 +25,11 @@
       "text": "我的",
       "iconPath": "static/images/tab-bar/wode.png",
       "selectedIconPath": "static/images/tab-bar/wode-active.png"
+    }, {
+      "pagePath": "pages/line/main",
+      "text": "图表",
+      "iconPath": "static/images/tab-bar/table.png",
+      "selectedIconPath": "static/images/tab-bar/table-active.png"
     }]
   }
 }
