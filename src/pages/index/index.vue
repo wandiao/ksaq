@@ -27,6 +27,7 @@
     负压: '/static/images/common/vol.png',
     断电馈电器: '/static/images/common/break.png',
     激光甲烷: '/static/images/common/line.png',
+    甲烷高低浓: '/static/images/common/line.png',
     二氧化碳: '/static/images/common/co2.png',
     风速: '/static/images/common/speed.png',
     读卡器: '/static/images/common/card.png',
