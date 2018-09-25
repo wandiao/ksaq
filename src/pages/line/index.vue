@@ -24,9 +24,24 @@ const options = {
     grid: {
       containLabel: true
     },
+    label:{
+      nomal:{
+        show:true
+      }
+    },
     tooltip: {
       show: true,
-      trigger: 'axis'
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        axis: "x",
+      }
+    },
+    markLine:{
+      data: [
+        {type: 'average',name: '平均值'},
+        {type: 'max',name: '平均值'}
+      ]
     },
     xAxis: {
       type: 'category',
