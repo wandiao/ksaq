@@ -2,21 +2,22 @@
   <div class="home container">
 
     <ul class="tb">
-      <div plain="true" size="mini" v-for="(item, index) in list" :key="index" @click="jump(item.ip)" class="tr">
-        <div class="contain1" ><img class="icon" :src="iconMap['综合分站']" float:left /></div>
+      <div plain="true" size="mini" v-for="(item, index) in list" :key="index" class="tr">
+        <div class="contain1" ><img class="icon" :src="iconMap[item.name]" float:left /></div>
         <div class="contain2">
             <div class="contain3">
-                <img class="icon1" :src="iconMap['ipicon']"/>
-                <span class="iplabel">{{item.ip}}</span> 
-                <img class="icon2" :src="iconMap['macicon']"/>
-                <span class="maclabel">{{item.mac}}</span>
+                <img class="icon1" :src="iconMap[item.link]"/>
+                <img class="icon1" :src="iconMap[item.can]">
+                <img class="icon1" :src="iconMap['codeicon']"/>
+                <span class="iplabel">{{item.addr}}</span> 
+                <img class="icon2" :src="iconMap['nameicon']"/>
+                <span class="maclabel">{{item.name}}</span>
             </div>
-
             <div class="contain3">
-                <img class="icon1" :src="iconMap['verbicon']"/>
-                <span class="iplabel" >{{item.softVersion}}</span> 
-                <img class="icon3" :src="iconMap['positionicon']"/>
-                <span class="maclabel">{{item.position}}</span>
+                <!-- <img class="icon1" :src="iconMap['verbicon']"/>
+                <span class="iplabel" >{{item.softVersion}}</span>  -->
+                <img class="icon3" :src="iconMap['infoicon']"/>
+                <span class="maclabel">{{item.value}}</span>
             </div>
         </div>
       </div>
@@ -28,14 +29,14 @@
   const iconMap = {
     烟雾: '/static/images/common/smog.png',
     开停: '/static/images/common/switch.png',
-    温湿度: '/static/images/common/warm.png',
+    温湿度: '/static/images/common/tempth.png',
     负压: '/static/images/common/vol.png',
-    断电馈电器: '/static/images/common/break.png',
+    断电器: '/static/images/common/breaker.png',
     激光甲烷: '/static/images/common/line.png',
     甲烷高低浓: '/static/images/common/line.png',
     二氧化碳: '/static/images/common/co2.png',
     风速: '/static/images/common/speed.png',
-    读卡器: '/static/images/common/card.png',
+    读卡器: '/static/images/common/reader.png',
     甲烷低浓度: '/static/images/common/ch4.png',
     广播终端: '/static/images/common/boardcast.png',
     氧气: '/static/images/common/o2.png',
@@ -44,17 +45,18 @@
     语音风门: '/static/images/common/fengmen.png',
     风筒: '/static/images/common/fengtong.png',
     电源: '/static/images/common/power.png',
-    C1: '/static/images/common/index1.png',
-    C2: '/static/images/common/index2.png',
-    C3: '/static/images/common/index3.png',
-    C4: '/static/images/common/index4.png',
-    连接正常: '/static/images/common/link.png',
-    连接断开: '/static/images/common/linkbreak.png',
+    CAN1: '/static/images/common/index1.png',
+    CAN2: '/static/images/common/index2.png',
+    CAN3: '/static/images/common/index3.png',
+    CAN4: '/static/images/common/index4.png',
+    正常: '/static/images/common/link.png',
+    中断: '/static/images/common/linkbreak.png',
+    未知: '/static/images/common/linkbreak.png',
     等待连接: '/static/images/common/waitlink.png',
     综合分站: '/static/images/common/station.png',
-    ipicon: '/static/images/common/ipicon.png',
-    macicon: '/static/images/common/macicon.png',
-    verbicon: '/static/images/common/verbicon.png',
+    codeicon: '/static/images/common/code.png',
+    nameicon: '/static/images/common/name.png',
+    infoicon: '/static/images/common/infoicon.png',
     positionicon: '/static/images/common/position.png',
   };
 
@@ -63,49 +65,55 @@
       return {
         list: [],
         iconMap,
+        ip: null,
       };
     },
     methods: {
-      jump(ip) {
-        wx.navigateTo({
-          url: `/pages/sensorinfo/main?ip=${ip}`,
-        });
+      sensorinfo(msg, ev) {
+        console.log('clickHandle:', msg, ev);
       },
     },
-    onLoad() {
+    onLoad(options) {
+      this.ip = options.ip;
       wx.setNavigationBarTitle({
-        title: '分站列表',
+        title: `${this.ip}分站实时信息`,
       });
     },
     onPullDownRefresh() {
       wx.showLoading();
       wx.request({
-        url: 'https://api.zouyang.ltd/getstationlist',
+        url: `https://api.zouyang.ltd/stationcurinfo?ip=${this.ip}`,
         success: (res) => {
           console.log(res);
           wx.hideLoading();
-          this.list = res.data.stationList;
+          this.list = res.data.sensors;
           wx.stopPullDownRefresh();
         },
       });
     },
     created() {
       wx.showLoading();
-      wx.request({
-        url: 'https://api.zouyang.ltd/getstationlist',
-        success: (res) => {
-          console.log(res);
-          wx.hideLoading();
-          this.list = res.data.stationList;
-        },
-      });
+      setInterval(() => {
+        if (this.ip != null) {
+          wx.request({
+            url: `https://api.zouyang.ltd/stationcurinfo?ip=${this.ip}`,
+            success: (res) => {
+              wx.hideLoading();
+              this.list = res.data.sensors;
+            },
+          });
+        }
+      }, 500);
+    },
+    onHide() {
+      console.log('----------------------');
     },
   };
 </script>
 
 <style lang="less" scoped>
   @import '../../styles/mixin';
-  .tr{
+.tr{
         display: flex;
         align-items: left;     /*垂直居中*/
         margin-bottom: 5rpx;
@@ -119,7 +127,6 @@
   align-items: center;     /*垂直居中*/
   font-size: 30rpx;
   margin-top: 20rpx;
-  margin-bottom: 20rpx;
 }
 .icon{
   width: 128rpx;
@@ -130,16 +137,17 @@
 .icon1{
   width: 32rpx;
   height: 32rpx;
+  margin-left: 5rpx;
 }
 .icon2{
   width: 32rpx;
   height: 32rpx;
-  margin-left: 25rpx;
+  margin-left: 35rpx;
 }
 .icon3{
   width: 32rpx;
   height: 32rpx;
-  margin-left: 45rpx;
+  margin-left: 5rpx;
 }
 
 .home {

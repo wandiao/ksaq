@@ -2,9 +2,11 @@
   "pages": [
     "pages/index/main",
     "pages/me/main",
-    "pages/line/main"
+    "pages/line/main",
+    "pages/sensorinfo/main"
   ],
   "window": {
+    "enablePullDownRefresh": true,
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#58C8DC",
     "navigationBarTitleText": "矿山安全监控",
@@ -17,7 +19,7 @@
     "borderStyle": "black",
     "list": [{
       "pagePath": "pages/index/main",
-      "text": "监控数据",
+      "text": "分站列表",
       "iconPath": "static/images/tab-bar/ycmz.png",
       "selectedIconPath": "static/images/tab-bar/ycmz-active.png"
     }, {
