@@ -12,9 +12,9 @@
                 <span class="maclabel">{{item.mac}}</span>
             </div>
 
-            <div class="contain3">
+            <div class="contain4">
                 <img class="icon1" :src="iconMap['verbicon']"/>
-                <span class="iplabel" >{{item.softVersion}}</span> 
+                <span class="iplabel" >{{item.version}}</span> 
                 <img class="icon3" :src="iconMap['positionicon']"/>
                 <span class="maclabel">{{item.position}}</span>
             </div>
@@ -80,11 +80,11 @@
     onPullDownRefresh() {
       wx.showLoading();
       wx.request({
-        url: 'https://api.zouyang.ltd/getstationlist',
+        url: 'https://api.zouyang.ltd/stationlist',
         success: (res) => {
           console.log(res);
           wx.hideLoading();
-          this.list = res.data.stationList;
+          this.list = res.data;
           wx.stopPullDownRefresh();
         },
       });
@@ -92,11 +92,11 @@
     created() {
       wx.showLoading();
       wx.request({
-        url: 'https://api.zouyang.ltd/getstationlist',
+        url: 'https://api.zouyang.ltd/stationlist',
         success: (res) => {
           console.log(res);
           wx.hideLoading();
-          this.list = res.data.stationList;
+          this.list = res.data;
         },
       });
     },
@@ -106,26 +106,33 @@
 <style lang="less" scoped>
   @import '../../styles/mixin';
   .tr{
-        display: flex;
-        align-items: left;     /*垂直居中*/
-        margin-bottom: 5rpx;
-        border-bottom: 3rpx solid #000;
-        border-top: 3rpx solid #000;
-        border-left: 3rpx solid #000;
-        border-right: 3rpx solid #000;
+      display: flex;
+      align-items: left;     /*垂直居中*/
+      box-shadow:0 0 10rpx rgb(0, 0, 0);
+      margin-top: 10rpx;
+      margin-left: 10rpx;
+      margin-right: 10rpx;
   }
 .contain3{
   display: flex;
   align-items: center;     /*垂直居中*/
   font-size: 30rpx;
-  margin-top: 20rpx;
-  margin-bottom: 20rpx;
+  margin-top: 15rpx;
+  margin-bottom: 5rpx;
+}
+.contain4{
+  display: flex;
+  align-items: center;     /*垂直居中*/
+  font-size: 30rpx;
+  margin-top: 25rpx;
 }
 .icon{
   width: 128rpx;
   height: 128rpx;
+  box-shadow:0 0 20px rgb(7, 117, 84) inset,0 0 5px rgb(7, 117, 84);
   margin-top: 5rpx;
   margin-bottom: 5rpx;
+  margin-left: 5rpx;
 }
 .icon1{
   width: 32rpx;

@@ -13,9 +13,9 @@ const options = {
       text: '温度传感器历史数据',
       left: 'center'
     },
-    color: ["#37A2DA", "#67E0E3", "#9FE6B8"],
+    color: ["#37A2DA"],
     legend: {
-      data: ['71#', '72#', '74#'],
+      data: ['71#'],
       top: 50,
       left: 'center',
       backgroundColor: 'white',
@@ -46,7 +46,7 @@ const options = {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00','07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+      data: this.listx,
     },
     yAxis: {
       x: 'center',
@@ -61,27 +61,8 @@ const options = {
       name: '71#',
       type: 'line',
       smooth: false,
-      data: [18.0, 18.2, 18.5, 18.7, 18.8, 18.8, 
-      19.2, 19.4, 19.3, 19.6, 19.8, 19.9, 
-      21.3, 21.6, 21.8, 22.6, 22.5, 22.3, 
-      21.6, 21.4, 21.2, 19.6, 18.5, 18.4]
-    }, {
-      name: '72#',
-      type: 'line',
-      smooth: false,
-      data: [18.3, 18.2, 18.8, 18.7, 18.8, 18.8, 
-      18.6, 18.0, 18.6, 18.5, 18.7, 22.5, 
-      18.8, 18.6, 18.0, 18.9, 21.5, 18.7, 
-      18.8, 18.8, 18.6, 18.9, 21.6, 22.5]
-    }, {
-      name: '74#',
-      type: 'line',
-      smooth: false,
-      data: [12.3, 12.6, 13.0, 13.4, 14.0, 14.5, 
-      14.6, 14.8, 15.2, 15.6, 15.9, 16.5, 
-      17.1, 17.8, 17.0, 16.5, 16.0, 15.5, 
-      15.3, 15.0, 14.3, 14.0, 12.2, 12.0]
-}]
+      data: this.listy
+    }]
   };
 
 export default {
@@ -90,9 +71,55 @@ export default {
       ec: {
         // 传 options
         options: options
-      }
+      },
+      ipandaddr,
+      list: [],
+      listx: [],
+      listy: [],
     }
-  }
+  },
+    onLoad(options) {
+      this.ipandaddr = options.ipandaddr;
+      wx.setNavigationBarTitle({
+        title: `监测曲线`,
+      });
+    },
+    onPullDownRefresh() {
+      wx.showLoading();
+      wx.request({
+        url: `https://api.zouyang.ltd/sensorinfologs?ipandaddr=${this.ipipandaddrandaddr}`,
+        success: (res) => {
+          console.log(res);
+          wx.hideLoading();
+          this.listx = null;
+          this.listy = null;
+          this.list = res.data;
+          for(var i=0;i<this.list.length;i++){
+              listx.push(this.list[i].time);
+              listy.push(this.lst[i].listenvalue);
+          }
+          wx.stopPullDownRefresh();
+        },
+      });
+    },
+    created() {
+        wx.showLoading();
+        wx.request({
+        url: `https://api.zouyang.ltd/sensorinfologs?ipandaddr=${this.ipipandaddrandaddr}`,
+        success: (res) => {
+          console.log(res);
+          wx.hideLoading();
+          this.listx = null;
+          this.listy = null;
+          this.list = res.data;
+          for(var i=0;i<this.list.length;i++){
+              listx.push(this.list[i].time);
+              listy.push(this.lst[i].listenvalue);
+          }
+          wx.hideLoading();
+        },
+      });
+    },
 }
 </script>
 

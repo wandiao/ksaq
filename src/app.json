@@ -1,9 +1,9 @@
 {
   "pages": [
     "pages/index/main",
-    "pages/me/main",
-    "pages/line/main",
+    "pages/sensorchart/main",
     "pages/sensorinfo/main"
+    
   ],
   "window": {
     "enablePullDownRefresh": true,
@@ -11,27 +11,5 @@
     "navigationBarBackgroundColor": "#58C8DC",
     "navigationBarTitleText": "矿山安全监控",
     "navigationBarTextStyle": "white"
-  },
-  "tabBar": {
-    "color": "#666",
-    "selectedColor": "#58C8DC",
-    "backgroundColor": "#fff",
-    "borderStyle": "black",
-    "list": [{
-      "pagePath": "pages/index/main",
-      "text": "分站列表",
-      "iconPath": "static/images/tab-bar/ycmz.png",
-      "selectedIconPath": "static/images/tab-bar/ycmz-active.png"
-    }, {
-      "pagePath": "pages/me/main",
-      "text": "我的",
-      "iconPath": "static/images/tab-bar/wode.png",
-      "selectedIconPath": "static/images/tab-bar/wode-active.png"
-    }, {
-      "pagePath": "pages/line/main",
-      "text": "图表",
-      "iconPath": "static/images/tab-bar/table.png",
-      "selectedIconPath": "static/images/tab-bar/table-active.png"
-    }]
   }
 }

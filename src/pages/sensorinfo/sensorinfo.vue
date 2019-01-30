@@ -2,7 +2,7 @@
   <div class="home container">
 
     <ul class="tb">
-      <div plain="true" size="mini" v-for="(item, index) in list" :key="index" class="tr">
+      <div plain="true" size="mini" v-for="(item, index) in list" :key="index" @click="showchart(item.ipandaddr)" class="tr">
         <div class="contain1" ><img class="icon" :src="iconMap[item.name]" float:left /></div>
         <div class="contain2">
             <div class="contain3">
@@ -13,7 +13,7 @@
                 <img class="icon2" :src="iconMap['nameicon']"/>
                 <span class="maclabel">{{item.name}}</span>
             </div>
-            <div class="contain3">
+            <div class="contain4">
                 <!-- <img class="icon1" :src="iconMap['verbicon']"/>
                 <span class="iplabel" >{{item.softVersion}}</span>  -->
                 <img class="icon3" :src="iconMap['infoicon']"/>
@@ -69,6 +69,11 @@
       };
     },
     methods: {
+      showchart(ipandaddr) {
+        wx.navigateTo({
+          url: `/pages/sensorchart/main?ipandaddr=${ipandaddr}`,
+        });
+      },
       sensorinfo(msg, ev) {
         console.log('clickHandle:', msg, ev);
       },
@@ -76,17 +81,17 @@
     onLoad(options) {
       this.ip = options.ip;
       wx.setNavigationBarTitle({
-        title: `${this.ip}分站实时信息`,
+        title: `${this.ip}`,
       });
     },
     onPullDownRefresh() {
       wx.showLoading();
       wx.request({
-        url: `https://api.zouyang.ltd/stationcurinfo?ip=${this.ip}`,
+        url: `https://api.zouyang.ltd/curinfo?ip=${this.ip}`,
         success: (res) => {
           console.log(res);
           wx.hideLoading();
-          this.list = res.data.sensors;
+          this.list = res.data;
           wx.stopPullDownRefresh();
         },
       });
@@ -96,43 +101,46 @@
       setInterval(() => {
         if (this.ip != null) {
           wx.request({
-            url: `https://api.zouyang.ltd/stationcurinfo?ip=${this.ip}`,
+            url: `https://api.zouyang.ltd/curinfo?ip=${this.ip}`,
             success: (res) => {
               wx.hideLoading();
-              this.list = res.data.sensors;
+              this.list = res.data;
             },
           });
         }
-      }, 500);
-    },
-    onHide() {
-      console.log('----------------------');
+      }, 1000);
     },
   };
 </script>
-
 <style lang="less" scoped>
   @import '../../styles/mixin';
 .tr{
-        display: flex;
-        align-items: left;     /*垂直居中*/
-        margin-bottom: 5rpx;
-        border-bottom: 3rpx solid #000;
-        border-top: 3rpx solid #000;
-        border-left: 3rpx solid #000;
-        border-right: 3rpx solid #000;
+      display: flex;
+      align-items: left;     /*垂直居中*/
+      box-shadow:0 0 10rpx rgb(0, 0, 0);
+      margin-top: 10rpx;
+      margin-left: 10rpx;
+      margin-right: 10rpx;
   }
 .contain3{
   display: flex;
   align-items: center;     /*垂直居中*/
   font-size: 30rpx;
-  margin-top: 20rpx;
+  margin-top: 10rpx;
+}
+.contains4{
+  display: flex;
+  align-items: center;     /*垂直居中*/
+  font-size: 30rpx;
+  margin-bottom: 10rpx;
 }
 .icon{
-  width: 128rpx;
-  height: 128rpx;
+  width: 96rpx;
+  height: 96rpx;
+  box-shadow:0 0 15px rgb(15, 112, 141) inset,0 0 5px rgb(15, 112, 141);
   margin-top: 5rpx;
   margin-bottom: 5rpx;
+  margin-left: 5rpx;
 }
 .icon1{
   width: 32rpx;
@@ -149,13 +157,9 @@
   height: 32rpx;
   margin-left: 5rpx;
 }
-
-.home {
-    padding: 5rpx;
-  }
 .tb{
     .button-hover {
-  background-color: rgba(0, 255, 242, 0.329);
+  background-color: rgba(10, 88, 85, 0.603);
 }
   .other-button-hover {
   background-color: blue;
