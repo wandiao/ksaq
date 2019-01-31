@@ -1,9 +1,8 @@
 {
   "pages": [
     "pages/index/main",
-    "pages/sensorchart/main",
-    "pages/sensorinfo/main"
-    
+    "pages/sensorinfo/main",
+    "pages/sensorchart/main"    
   ],
   "window": {
     "enablePullDownRefresh": true,
