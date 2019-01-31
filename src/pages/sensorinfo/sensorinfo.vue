@@ -2,7 +2,8 @@
   <div class="home container">
 
     <ul class="tb">
-      <div plain="true" size="mini" v-for="(item, index) in list" :key="index" @click="showchart(item.ipandaddr)" class="tr">
+      <!-- <div plain="true" size="mini" v-for="(item, index) in list" :key="index" @click="showchart(item.ipandaddr)" class="tr"> -->
+      <div plain="true" size="mini" v-for="(item, index) in list" :key="index" class="tr">
         <div class="contain1" ><img class="icon" :src="iconMap[item.name]" float:left /></div>
         <div class="contain2">
             <div class="contain3">

@@ -1,14 +1,15 @@
 <template>
   <div class="counter-warp">
     <div class="container df-ct">
-      <ec-canvas class="canvas" id="mychart-dom-bar" canvas-id="mychart-bar" :ec="ec"></ec-canvas>
+      <ec-canvas class="canvas" id="mychart-dom-line" canvas-id="mychart-bar" :ec="ec"></ec-canvas>
     </div>
   </div>
 </template>
 
 <script>
+import Chart from '../../../static/ec-canvas/echarts';
 /* eslint-disable  */
-const options = {
+var options = {
     title: {
       text: '温度传感器历史数据',
       left: 'center'
@@ -58,67 +59,68 @@ const options = {
       }
     },
     series: [{
-      name: '71#',
+      name: this.ipandaddr,
       type: 'line',
       smooth: false,
       data: this.listy
     }]
   };
-
+ function init() {
+    this.chart = Chart.init(this.$ec-canvas.canvas);
+    this.chart.setOption(this.option);
+  }
 export default {
   data () {
     return {
+      ipandaddr: '',
+      listx: ['1','2','3'],
+      listy: [1,2,3],
+      chart: '',
       ec: {
         // 传 options
         options: options
-      },
-      ipandaddr,
-      list: [],
-      listx: [],
-      listy: [],
+      }
     }
+  },
+  methods: {
+ 
   },
     onLoad(options) {
       this.ipandaddr = options.ipandaddr;
       wx.setNavigationBarTitle({
         title: `监测曲线`,
       });
+      wx.showLoading();
+        wx.request({
+        url: `https://api.zouyang.ltd/sensorinfologs?ipandaddr=${this.ipandaddr}`,
+        success: (res) => {
+          wx.hideLoading();
+          for(var i=0;i<res.data.length;i++){
+              this.listx.push(res.data[i].time);
+              this.listy.push(res.data[i].listenvalue);
+          }
+          wx.hideLoading();
+        },
+      });
     },
     onPullDownRefresh() {
+      var that = this;
       wx.showLoading();
       wx.request({
-        url: `https://api.zouyang.ltd/sensorinfologs?ipandaddr=${this.ipipandaddrandaddr}`,
+        url: `https://api.zouyang.ltd/sensorinfologs?ipandaddr=${this.ipandaddr}`,
         success: (res) => {
-          console.log(res);
           wx.hideLoading();
-          this.listx = null;
-          this.listy = null;
-          this.list = res.data;
-          for(var i=0;i<this.list.length;i++){
-              listx.push(this.list[i].time);
-              listy.push(this.lst[i].listenvalue);
+          for(var i=0;i<res.data.length;i++){
+              that.listx.push(res.data[i].time);
+              that.listy.push(res.data[i].listenvalue);
           }
-          wx.stopPullDownRefresh();
+          init();
+          wx.hideLoading();
         },
       });
     },
     created() {
-        wx.showLoading();
-        wx.request({
-        url: `https://api.zouyang.ltd/sensorinfologs?ipandaddr=${this.ipipandaddrandaddr}`,
-        success: (res) => {
-          console.log(res);
-          wx.hideLoading();
-          this.listx = null;
-          this.listy = null;
-          this.list = res.data;
-          for(var i=0;i<this.list.length;i++){
-              listx.push(this.list[i].time);
-              listy.push(this.lst[i].listenvalue);
-          }
-          wx.hideLoading();
-        },
-      });
+        
     },
 }
 </script>
