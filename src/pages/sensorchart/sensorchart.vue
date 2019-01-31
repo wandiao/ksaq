@@ -11,7 +11,6 @@ import echarts from '../../../static/echarts.min';
 /* eslint-disable  */
 
 let chart = null;
-
 function initChart(canvas, width, height) {
   chart = echarts.init(canvas, null, {
     width,
@@ -75,6 +74,103 @@ function initChart(canvas, width, height) {
   chart.setOption(option);
   return chart; // 返回 chart 后可以自动绑定触摸操作
 }
+function freshchart(route) {
+  wx.request({
+    url: `https://api.zouyang.ltd/sensorinfologs?ipandaddr=${route}`,
+    success: res => {
+      var listx = [];
+      var listy = [];
+      console.log(res.data.length);
+      for (var i = 0; i < res.data.length; i++) {
+        listx.push(res.data[i].time);
+        listy.push(res.data[i].listenvalue);
+      }
+      var option = {
+        title: {
+          text: "温度传感器历史数据",
+          left: "center"
+        },
+        color: ["#37A2DA"],
+        legend: {
+          data: ["71#"],
+          top: 50,
+          left: "center",
+          backgroundColor: "white",
+          z: 100
+        },
+        label: {
+          nomal: {
+            show: true
+          }
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            mark: { show: true },
+            dataZoom: { show: true },
+            restore: { show: true }
+          }
+        },
+        calculable: true,
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            show: true,
+            type: "cross",
+            lineStyle: {
+              type: "dashed",
+              width: 1
+            }
+          }
+        },
+        dataZoom: {
+          type: "slider",
+          realtime: true,
+          show: true,
+          start: 50,
+          end: 75
+        },
+        markLine: {
+          data: [
+            { type: "average", name: "平均值" },
+            { type: "max", name: "平均值" }
+          ]
+        },
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: listx
+        },
+        yAxis: {
+          x: "center",
+          type: "value",
+          splitLine: {
+            lineStyle: {
+              type: "dashed"
+            }
+          }
+        },
+        series: [
+          {
+            name: "监测值",
+            type: "line",
+            data: listy,
+            // itemStyle: {normal: {areaStyle: {type: 'default'}, color:'#00C5CD'}},
+            color: "#4acd93",
+            smooth: true,
+            showAllSymbol: true,
+            symbolSize: function(value) {
+              return Math.round(value[2] / 10) + 2;
+            }
+          }
+        ]
+      };
+      console.log(chart);
+      chart.setOption(option);
+      wx.hideLoading();
+    }
+  });
+}
 export default {
   components: {
     mpvueEcharts
@@ -85,7 +181,8 @@ export default {
       onInit: initChart,
       ipandaddr: "",
       listx: [],
-      listy: []
+      listy: [],
+      freshaddr: ""
     };
   },
   onLoad(options) {
@@ -93,104 +190,21 @@ export default {
     wx.setNavigationBarTitle({
       title: `监测曲线`
     });
-    wx.showLoading();
-    wx.request({
-      url: `https://api.zouyang.ltd/sensorinfologs?ipandaddr=${this.ipandaddr}`,
-      success: res => {
-        this.listx = [];
-        this.listy = [];
-        console.log(res.data.length);
-        for (var i = 0; i < res.data.length; i++) {
-          this.listx.push(res.data[i].time);
-          this.listy.push(res.data[i].listenvalue);
+    setInterval(() => {
+      if (chart != null) {
+        if (this.ipandaddr != null) {
+          if (this.ipandaddr != this.freshaddr) freshchart(this.ipandaddr);
+          this.freshaddr = this.ipandaddr;
         }
-        const option = {
-          title: {
-            text: "温度传感器历史数据",
-            left: "center"
-          },
-          color: ["#37A2DA"],
-          legend: {
-            data: ["71#"],
-            top: 50,
-            left: "center",
-            backgroundColor: "white",
-            z: 100
-          },
-          label: {
-            nomal: {
-              show: true
-            }
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              mark: { show: true },
-              dataZoom : {show: true},
-              restore: { show: true },
-            }
-          },
-          calculable: true,
-          tooltip: {
-            trigger: "axis",
-            axisPointer: {
-              show: true,
-              type: "cross",
-              lineStyle: {
-                type: "dashed",
-                width: 1
-              }
-            }
-          },
-          dataZoom: {
-            type: 'slider',
-            realtime: true,
-            show: true,
-            start: 50,
-            end: 75
-          },
-          markLine: {
-            data: [
-              { type: "average", name: "平均值" },
-              { type: "max", name: "平均值" }
-            ]
-          },
-          xAxis: {
-            type: "category",
-            boundaryGap: false,
-            data: this.listx
-          },
-          yAxis: {
-            x: "center",
-            type: "value",
-            splitLine: {
-              lineStyle: {
-                type: "dashed"
-              }
-            }
-          },
-          series: [
-            {
-              name: "监测值",
-              type: "line",
-              data: this.listy,
-              // itemStyle: {normal: {areaStyle: {type: 'default'}, color:'#00C5CD'}},
-              color: "#4acd93",
-              smooth: true,
-              showAllSymbol: true,
-              symbolSize: function(value) {
-                return Math.round(value[2] / 10) + 2;
-              }
-            }
-          ]
-        };
-        chart.setOption(option);
-        wx.hideLoading();
       }
-    });
+    }, 10);
   },
+  onReady() {},
+  created() {},
+
   onPullDownRefresh() {
-     wx.stopPullDownRefresh();
+    freshchart(this.ipandaddr);
+    wx.stopPullDownRefresh();
   }
 };
 </script>
