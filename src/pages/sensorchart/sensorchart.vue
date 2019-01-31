@@ -18,12 +18,7 @@ function initChart(canvas, width, height) {
     height
   });
   canvas.setChart(chart);
-  this.echarts = chart;
   const option = {
-    title: {
-      text: "温度传感器历史数据",
-      left: "center"
-    },
     color: ["#37A2DA"],
     legend: {
       data: ["71#"],
@@ -77,9 +72,7 @@ function initChart(canvas, width, height) {
       }
     ]
   };
-
   chart.setOption(option);
-
   return chart; // 返回 chart 后可以自动绑定触摸操作
 }
 export default {
@@ -106,6 +99,7 @@ export default {
       success: res => {
         this.listx = [];
         this.listy = [];
+        console.log(res.data.length);
         for (var i = 0; i < res.data.length; i++) {
           this.listx.push(res.data[i].time);
           this.listy.push(res.data[i].listenvalue);
@@ -123,25 +117,17 @@ export default {
             backgroundColor: "white",
             z: 100
           },
-          grid: {
-            containLabel: true
-          },
           label: {
             nomal: {
               show: true
             }
           },
-          grid: {
-            y2: 80
-          },
           toolbox: {
             show: true,
             feature: {
               mark: { show: true },
-              dataView: { show: true, readOnly: false, height: 120 },
-              magicType: { show: true, type: ["line", "bar"] },
+              dataZoom : {show: true},
               restore: { show: true },
-              saveAsImage: { show: true }
             }
           },
           calculable: true,
@@ -157,8 +143,11 @@ export default {
             }
           },
           dataZoom: {
+            type: 'slider',
+            realtime: true,
             show: true,
-            start: 70
+            start: 50,
+            end: 75
           },
           markLine: {
             data: [
@@ -208,6 +197,6 @@ export default {
 <style scoped>
 .echarts-wrap {
   width: 100%;
-  height: 300px;
+  height: 600rpx;
 }
 </style>
