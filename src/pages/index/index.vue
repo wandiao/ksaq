@@ -1,6 +1,5 @@
 <template>
   <div class="home container">
-
     <ul class="tb">
       <div plain="true" size="mini" v-for="(item, index) in list" :key="index" @click="jump(item.ip)" class="tr">
         <div class="contain1" ><img class="icon" :src="iconMap['综合分站']" float:left /></div>
@@ -108,7 +107,7 @@
   .tr{
       display: flex;
       align-items: left;     /*垂直居中*/
-      box-shadow:0 0 10rpx rgb(0, 0, 0);
+      box-shadow:0 0 10rpx rgb(62, 63, 63);
       margin-top: 10rpx;
       margin-left: 10rpx;
       margin-right: 10rpx;
@@ -129,7 +128,7 @@
 .icon{
   width: 128rpx;
   height: 128rpx;
-  box-shadow:0 0 20px rgb(7, 117, 84) inset,0 0 5px rgb(7, 117, 84);
+  box-shadow:0 0 20px rgb(9, 70, 52) inset,0 0 5px rgb(9, 70, 52);
   margin-top: 5rpx;
   margin-bottom: 5rpx;
   margin-left: 5rpx;

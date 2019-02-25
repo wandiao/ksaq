@@ -5,13 +5,15 @@
 		"es6": true,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": true,
+		"nodeModules": false,
+		"autoAudits": false
 	},
 	"miniprogramRoot": "dist/",
 	"compileType": "miniprogram",
 	"appid": "wx7b9679a9190ddae8",
 	"projectname": "ksaq",
-	"libVersion": "2.5.1",
+	"libVersion": "2.6.0",
 	"condition": {
 		"search": {
 			"current": -1,

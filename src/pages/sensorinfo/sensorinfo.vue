@@ -1,9 +1,13 @@
 <template>
   <div class="home container">
-
+    <div plain="true" size="mini" class="fl">
+       <img class="icon4" :src="iconMap['ipicon']"/>
+       <span class="titlelabel">{{ip}}</span>
+       <img class="icon4" :src="iconMap['time']"/>
+       <span class="titlelabel">{{list[0].time}}</span>
+    </div>
     <ul class="tb">
-      <div plain="true" size="mini" v-for="(item, index) in list" :key="index" @click="showchart(item.ipandaddr)" class="tr">
-      <!-- <div plain="true" size="mini" v-for="(item, index) in list" :key="index" class="tr"> -->
+      <div plain="true" size="mini" v-for="(item, index) in list" :key="index" @click="showchart(item.ipandaddr,item.addr,item.name)" class="tr">
         <div class="contain1" ><img class="icon" :src="iconMap[item.name]" float:left /></div>
         <div class="contain2">
             <div class="contain3">
@@ -15,8 +19,6 @@
                 <span class="maclabel">{{item.name}}</span>
             </div>
             <div class="contain4">
-                <!-- <img class="icon1" :src="iconMap['verbicon']"/>
-                <span class="iplabel" >{{item.softVersion}}</span>  -->
                 <img class="icon3" :src="iconMap['infoicon']"/>
                 <span class="maclabel">{{item.value}}</span>
             </div>
@@ -44,6 +46,7 @@
     一氧化碳: '/static/images/common/co.png',
     粉尘: '/static/images/common/drug.png',
     语音风门: '/static/images/common/fengmen.png',
+    转换器: '/static/images/common/switcher.png',
     风筒: '/static/images/common/fengtong.png',
     电源: '/static/images/common/power.png',
     CAN1: '/static/images/common/index1.png',
@@ -55,24 +58,39 @@
     未知: '/static/images/common/linkbreak.png',
     等待连接: '/static/images/common/waitlink.png',
     综合分站: '/static/images/common/station.png',
+    ipicon: '/static/images/common/ipicon.png',
     codeicon: '/static/images/common/code.png',
     nameicon: '/static/images/common/name.png',
     infoicon: '/static/images/common/infoicon.png',
     positionicon: '/static/images/common/position.png',
+    time: '/static/images/common/time.png',
   };
 
   export default {
     data() {
       return {
-        list: [],
+        list: [{
+          ipaddrtime: null,
+          ipandaddr: '192.168.1.30001',
+          updateTime: 0,
+          time: '--:--:--',
+          addr: '001',
+          link: '正常',
+          stationip: '192.168.1.30',
+          name: '断电器',
+          value: '复电 | 无电',
+          position: null,
+          can: 'CAN3',
+          listenvalue: 0,
+        }],
         iconMap,
         ip: null,
       };
     },
     methods: {
-      showchart(ipandaddr) {
+      showchart(ipandaddr, addr, name) {
         wx.navigateTo({
-          url: `/pages/sensorchart/main?ipandaddr=${ipandaddr}`,
+          url: `/pages/sensorchart/main?ipandaddr=${ipandaddr}&addr=${addr}&name=${name}`,
         });
       },
       sensorinfo(msg, ev) {
@@ -82,7 +100,7 @@
     onLoad(options) {
       this.ip = options.ip;
       wx.setNavigationBarTitle({
-        title: `${this.ip}`,
+        title: '分站实时数据',
       });
     },
     onPullDownRefresh() {
@@ -90,7 +108,6 @@
       wx.request({
         url: `https://api.zouyang.ltd/curinfo?ip=${this.ip}`,
         success: (res) => {
-          console.log(res);
           wx.hideLoading();
           this.list = res.data;
           wx.stopPullDownRefresh();
@@ -118,11 +135,23 @@
 .tr{
       display: flex;
       align-items: left;     /*垂直居中*/
-      box-shadow:0 0 10rpx rgb(0, 0, 0);
+      box-shadow:0 0 10rpx rgb(50, 53, 52);
       margin-top: 10rpx;
       margin-left: 10rpx;
       margin-right: 10rpx;
   }
+.tb{
+  margin-top: 106rpx;
+  }
+.fl{
+  display: flex;
+  top:  0;
+  box-shadow:0 0 10rpx rgb(50, 53, 52);
+  position: fixed;
+  background-color: rgb(11, 192, 177);
+  width: 100vw;
+  height: 96rpx;
+}
 .contain3{
   display: flex;
   align-items: center;     /*垂直居中*/
@@ -130,10 +159,9 @@
   margin-top: 10rpx;
 }
 .contains4{
-  display: flex;
-  align-items: center;     /*垂直居中*/
   font-size: 30rpx;
-  margin-bottom: 10rpx;
+  margin-top: 15rpx;
+  margin-bottom: 5rpx;
 }
 .icon{
   width: 96rpx;
@@ -151,12 +179,24 @@
 .icon2{
   width: 32rpx;
   height: 32rpx;
+  margin-top: 5rpx;
   margin-left: 35rpx;
 }
 .icon3{
   width: 32rpx;
   height: 32rpx;
   margin-left: 5rpx;
+}
+.icon4{
+  width: 64rpx;
+  height: 64rpx;
+  margin-top: 15rpx;
+  margin-left: 50rpx;
+}
+.titlelabel{
+  display: flex;
+  align-items: center;     /*垂直居中*/
+  font-size: 36rpx;
 }
 .tb{
     .button-hover {
