@@ -1,6 +1,6 @@
 <template>
   <div class="home container">
-    <ul class="tb">
+    <!-- <ul class="tb">
       <div plain="true" size="mini" v-for="(item, index) in list" :key="index" @click="jump(item.ip)" class="tr">
         <div class="contain1" ><img class="icon" :src="iconMap['综合分站']" float:left /></div>
         <div class="contain2">
@@ -10,7 +10,6 @@
                 <img class="icon2" :src="iconMap['macicon']"/>
                 <span class="maclabel">{{item.mac}}</span>
             </div>
-
             <div class="contain4">
                 <img class="icon1" :src="iconMap['verbicon']"/>
                 <span class="iplabel" >{{item.version}}</span> 
@@ -19,7 +18,21 @@
             </div>
         </div>
       </div>
-    </ul>
+    </ul> -->
+    <van-row v-for="(item, index) in list" :key="index" @click="jump(item.ip)">
+      <van-col><img class="icon" :src="iconMap['综合分站']" float:left /></van-col>
+      <van-col>
+        <van-row>
+          <van-col><img class="icon1" :src="iconMap['ipicon']"/></van-col><van-col>{{item.ip}}</van-col> <van-col><img class="icon1" :src="iconMap['macicon']"/></van-col><van-col>{{item.mac}}</van-col>
+        </van-row>
+        <van-row>
+          <van-col><img class="icon1" :src="iconMap['verbicon']"/></van-col>
+          <van-col>{{item.version}}</van-col>
+          <van-col><img class="icon1" :src="iconMap['positionicon']"/></van-col>
+          <van-col>{{item.position}}</van-col>
+        </van-row>
+      </van-col>
+    </van-row>
   </div>
 </template>
 
