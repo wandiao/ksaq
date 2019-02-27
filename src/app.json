@@ -10,5 +10,10 @@
     "navigationBarBackgroundColor": "#58C8DC",
     "navigationBarTitleText": "矿山安全监控",
     "navigationBarTextStyle": "white"
+  },
+  "usingComponents": {
+    "van-button": "/static/vant/button/index",
+    "van-row": "/static/vant/row/index",
+    "van-col": "/static/vant/col/index"
   }
 }

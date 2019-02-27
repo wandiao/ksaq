@@ -4,10 +4,10 @@
        <img class="icon4" :src="iconMap['ipicon']"/>
        <span class="titlelabel">{{ip}}</span>
        <img class="icon4" :src="iconMap['time']"/>
-       <span class="titlelabel">{{list[0].time}}</span>
+       <span class="titlelabel">{{time}}</span>
     </div>
     <ul class="tb">
-      <div plain="true" size="mini" v-for="(item, index) in list" :key="index" @click="showchart(item.ipandaddr,item.addr,item.name)" class="tr">
+      <div plain="true" size="mini" v-for="(item, index) in list" :key="index" @click="showchart(item.ipandaddr,item.addr,item.name,ip)" class="tr">
         <div class="contain1" ><img class="icon" :src="iconMap[item.name]" float:left /></div>
         <div class="contain2">
             <div class="contain3">
@@ -53,6 +53,7 @@
     CAN2: '/static/images/common/index2.png',
     CAN3: '/static/images/common/index3.png',
     CAN4: '/static/images/common/index4.png',
+    CANNONE: '/static/images/common/none.png',
     正常: '/static/images/common/link.png',
     中断: '/static/images/common/linkbreak.png',
     未知: '/static/images/common/linkbreak.png',
@@ -69,35 +70,23 @@
   export default {
     data() {
       return {
-        list: [{
-          ipaddrtime: null,
-          ipandaddr: '192.168.1.30001',
-          updateTime: 0,
-          time: '--:--:--',
-          addr: '001',
-          link: '正常',
-          stationip: '192.168.1.30',
-          name: '断电器',
-          value: '复电 | 无电',
-          position: null,
-          can: 'CAN3',
-          listenvalue: 0,
-        }],
+        list: [],
+        time: '--:--:--',
         iconMap,
         ip: null,
+        fresh: null,
       };
     },
     methods: {
-      showchart(ipandaddr, addr, name) {
+      showchart(ipandaddr, addr, name, ip) {
+        this.fresh = null;
         wx.navigateTo({
-          url: `/pages/sensorchart/main?ipandaddr=${ipandaddr}&addr=${addr}&name=${name}`,
+          url: `/pages/sensorchart/main?ipandaddr=${ipandaddr}&addr=${addr}&name=${name}&ip=${ip}`,
         });
-      },
-      sensorinfo(msg, ev) {
-        console.log('clickHandle:', msg, ev);
       },
     },
     onLoad(options) {
+      this.fresh = '1';
       this.ip = options.ip;
       wx.setNavigationBarTitle({
         title: '分站实时数据',
@@ -118,15 +107,24 @@
       wx.showLoading();
       setInterval(() => {
         if (this.ip != null) {
-          wx.request({
-            url: `https://api.zouyang.ltd/curinfo?ip=${this.ip}`,
-            success: (res) => {
-              wx.hideLoading();
-              this.list = res.data;
-            },
-          });
+          if (this.fresh != null) {
+            wx.request({
+              url: `https://api.zouyang.ltd/curinfo?ip=${this.ip}`,
+              success: (res) => {
+                wx.hideLoading();
+                this.list = res.data;
+                this.time = this.list[0].time;
+              },
+            });
+          }
         }
       }, 1000);
+    },
+    onShow() {
+      this.fresh = '1';
+    },
+    onUnload() {
+      this.fresh = null;
     },
   };
 </script>
@@ -135,7 +133,7 @@
 .tr{
       display: flex;
       align-items: left;     /*垂直居中*/
-      box-shadow:0 0 10rpx rgb(50, 53, 52);
+      box-shadow:0 0 5rpx rgb(57, 58, 59);
       margin-top: 10rpx;
       margin-left: 10rpx;
       margin-right: 10rpx;
@@ -160,7 +158,7 @@
 }
 .contains4{
   font-size: 30rpx;
-  margin-top: 15rpx;
+  margin-top: 10rpx;
   margin-bottom: 5rpx;
 }
 .icon{

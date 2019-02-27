@@ -128,7 +128,7 @@
 .icon{
   width: 128rpx;
   height: 128rpx;
-  box-shadow:0 0 20px rgb(9, 70, 52) inset,0 0 5px rgb(9, 70, 52);
+  box-shadow:0 0 20px rgb(26, 99, 141) inset,0 0 5px rgb(9, 70, 52);
   margin-top: 5rpx;
   margin-bottom: 5rpx;
   margin-left: 5rpx;
