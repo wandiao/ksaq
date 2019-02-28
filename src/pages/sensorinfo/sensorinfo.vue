@@ -1,33 +1,29 @@
 <template>
-  <div class="home container">
-    <div plain="true" size="mini" class="fl">
-       <img class="icon4" :src="iconMap['ipicon']"/>
-       <span class="titlelabel">{{ip}}</span>
-       <img class="icon4" :src="iconMap['time']"/>
-       <span class="titlelabel">{{time}}</span>
-    </div>
-    <ul class="tb">
-      <div plain="true" size="mini" v-for="(item, index) in list" :key="index" @click="showchart(item.ipandaddr,item.addr,item.name,ip)" class="tr">
-        <div class="contain1" ><img class="icon" :src="iconMap[item.name]" float:left /></div>
-        <div class="contain2">
-            <div class="contain3">
-                <img class="icon1" :src="iconMap[item.link]"/>
-                <img class="icon1" :src="iconMap[item.can]">
-                <img class="icon1" :src="iconMap['codeicon']"/>
-                <span class="iplabel">{{item.addr}}</span> 
-                <img class="icon2" :src="iconMap['nameicon']"/>
-                <span class="maclabel">{{item.name}}</span>
-            </div>
-            <div class="contain4">
-                <img class="icon3" :src="iconMap['infoicon']"/>
-                <span class="maclabel">{{item.value}}</span>
-            </div>
-        </div>
-      </div>
-    </ul>
+  <div>
+    <i-sticky :scrollTop="scrollTop">
+        <i-sticky-item i-class="i-sticky-demo-title">
+          <view slot="title">
+            <i-tag class="i-tags" name="1" color="blue" >{{position}}</i-tag>
+            <i-tag class="i-tags" name="1" color="green" >{{ip}}</i-tag>
+            <i-tag class="i-tags" name="1" color="blue" >{{version}}</i-tag>
+            <i-tag class="i-tags" name="1" color="green" >{{list[0].time}}</i-tag>
+          </view>
+          <view slot="content" v-for="(item, index) in list" :key="index" @click="showchart(item.ipandaddr,item.addr,item.name,ip)">
+            <view class="i-sticky-demo-item">
+              <i-card full="true" :title=item.name :thumb=iconMap[item.name] >
+                <view slot="content">
+                  <i-tag class="i-tags" name="1" color="blue" >{{item.addr}}#{{item.name}}</i-tag>
+                  <i-tag class="i-tags" name="1" :color= iconMap[item.link] >{{item.link}}</i-tag>
+                  <i-tag class="i-tags" name="1" :color= iconMap[item.can] >{{item.can}}</i-tag>
+                  <i-tag class="i-tags" name="1" color="green" >{{item.value}}</i-tag>
+                </view>
+              </i-card>
+            </view>
+          </view>
+        </i-sticky-item>
+         </i-sticky>
   </div>
 </template>
-
 <script>
   const iconMap = {
     烟雾: '/static/images/common/smog.png',
@@ -49,13 +45,13 @@
     转换器: '/static/images/common/switcher.png',
     风筒: '/static/images/common/fengtong.png',
     电源: '/static/images/common/power.png',
-    CAN1: '/static/images/common/index1.png',
-    CAN2: '/static/images/common/index2.png',
-    CAN3: '/static/images/common/index3.png',
-    CAN4: '/static/images/common/index4.png',
-    CANNONE: '/static/images/common/none.png',
-    正常: '/static/images/common/link.png',
-    中断: '/static/images/common/linkbreak.png',
+    CAN1: 'blue',
+    CAN2: 'blue',
+    CAN3: 'blue',
+    CAN4: 'blue',
+    CANNONE: 'red',
+    正常: 'green',
+    中断: 'red',
     未知: '/static/images/common/linkbreak.png',
     等待连接: '/static/images/common/waitlink.png',
     综合分站: '/static/images/common/station.png',
@@ -70,11 +66,14 @@
   export default {
     data() {
       return {
-        list: [],
+        list: [{ time: '--:--:--' }],
         time: '--:--:--',
+        position: '',
+        version: '',
         iconMap,
         ip: null,
         fresh: null,
+        scrollTop: 0,
       };
     },
     methods: {
@@ -84,13 +83,21 @@
           url: `/pages/sensorchart/main?ipandaddr=${ipandaddr}&addr=${addr}&name=${name}&ip=${ip}`,
         });
       },
+      getcolor(can) {
+        return can === 'CANNONE' ? 'red' : 'blue';
+      },
     },
     onLoad(options) {
       this.fresh = '1';
       this.ip = options.ip;
+      this.position = options.position;
+      this.version = options.version;
       wx.setNavigationBarTitle({
         title: '分站实时数据',
       });
+    },
+    onPageScroll(event) {
+      this.scrollTop = event.scrollTop;
     },
     onPullDownRefresh() {
       wx.showLoading();
@@ -130,102 +137,5 @@
 </script>
 <style lang="less" scoped>
   @import '../../styles/mixin';
-.tr{
-      display: flex;
-      align-items: left;     /*垂直居中*/
-      box-shadow:0 0 5rpx rgb(57, 58, 59);
-      margin-top: 10rpx;
-      margin-left: 10rpx;
-      margin-right: 10rpx;
-  }
-.tb{
-  margin-top: 106rpx;
-  }
-.fl{
-  display: flex;
-  top:  0;
-  box-shadow:0 0 10rpx rgb(50, 53, 52);
-  position: fixed;
-  background-color: rgb(11, 192, 177);
-  width: 100vw;
-  height: 96rpx;
-}
-.contain3{
-  display: flex;
-  align-items: center;     /*垂直居中*/
-  font-size: 30rpx;
-  margin-top: 10rpx;
-}
-.contains4{
-  font-size: 30rpx;
-  margin-top: 10rpx;
-  margin-bottom: 5rpx;
-}
-.icon{
-  width: 96rpx;
-  height: 96rpx;
-  box-shadow:0 0 15px rgb(15, 112, 141) inset,0 0 5px rgb(15, 112, 141);
-  margin-top: 5rpx;
-  margin-bottom: 5rpx;
-  margin-left: 5rpx;
-}
-.icon1{
-  width: 32rpx;
-  height: 32rpx;
-  margin-left: 5rpx;
-}
-.icon2{
-  width: 32rpx;
-  height: 32rpx;
-  margin-top: 5rpx;
-  margin-left: 35rpx;
-}
-.icon3{
-  width: 32rpx;
-  height: 32rpx;
-  margin-left: 5rpx;
-}
-.icon4{
-  width: 64rpx;
-  height: 64rpx;
-  margin-top: 15rpx;
-  margin-left: 50rpx;
-}
-.titlelabel{
-  display: flex;
-  align-items: center;     /*垂直居中*/
-  font-size: 36rpx;
-}
-.tb{
-    .button-hover {
-  background-color: rgba(10, 88, 85, 0.603);
-}
-  .other-button-hover {
-  background-color: blue;
-}
-}
-  .tr {
-    display: flex;
-    .th, .td {
-      position: relative;
-      flex: 1;
-      text-align: center;
-      &:after {
-        .hairline();
-        border-bottom-width: 1rpx;
-      }
-    }
-    .f0{
-      flex: 1;
-    }
-    
-    .th {
-      color: #4e76e2cb;
-    }
-    .td {
-      &.warn {
-        color: #F05E4B;
-      }
-    }
-  }
+
 </style>

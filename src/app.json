@@ -12,8 +12,14 @@
     "navigationBarTextStyle": "white"
   },
   "usingComponents": {
-    "van-button": "/static/vant/button/index",
-    "van-row": "/static/vant/row/index",
-    "van-col": "/static/vant/col/index"
+    "i-row": "/static/iview/row/index",
+    "i-col": "/static/iview/col/index",
+    "i-button": "/static/iview/button/index",
+    "i-card": "/static/iview/card/index",
+    "i-tag": "/static/iview/tag/index",
+    "i-panel": "/static/iview/panel/index",
+    "i-sticky": "/static/iview/sticky/index",
+    "i-sticky-item": "/static/iview/sticky-item/index",
+    "i-swipeout": "/static/iview/swipeout/index"
   }
 }
