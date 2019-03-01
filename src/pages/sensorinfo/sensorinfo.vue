@@ -3,22 +3,29 @@
     <i-sticky :scrollTop="scrollTop">
         <i-sticky-item i-class="i-sticky-demo-title">
           <view slot="title">
-            <i-tag class="i-tags" name="1" color="blue" >{{position}}</i-tag>
-            <i-tag class="i-tags" name="1" color="green" >{{ip}}</i-tag>
-            <i-tag class="i-tags" name="1" color="blue" >{{version}}</i-tag>
-            <i-tag class="i-tags" name="1" color="green" >{{list[0].time}}</i-tag>
+              <i-col span="3"><div class="contain1">
+                <img class="icon1" :src="iconMap['综合分站']" />
+                </div>
+                </i-col>
+              <i-col span="21">
+                <i-tag class="i-tags" name="1" color="yellow" >{{position}}</i-tag>
+                <i-tag class="i-tags" name="1" color="green" >{{ip}}</i-tag>
+                <i-tag class="i-tags" name="1" color="blue" >{{version}}</i-tag>
+                <i-tag class="i-tags" name="1" color="green" >{{time}}</i-tag>
+              </i-col>
           </view>
           <view slot="content" v-for="(item, index) in list" :key="index" @click="showchart(item.ipandaddr,item.addr,item.name,ip)">
-            <view class="i-sticky-demo-item">
-              <i-card full="true" :title=item.name :thumb=iconMap[item.name] >
-                <view slot="content">
-                  <i-tag class="i-tags" name="1" color="blue" >{{item.addr}}#{{item.name}}</i-tag>
-                  <i-tag class="i-tags" name="1" :color= iconMap[item.link] >{{item.link}}</i-tag>
-                  <i-tag class="i-tags" name="1" :color= iconMap[item.can] >{{item.can}}</i-tag>
-                  <i-tag class="i-tags" name="1" color="green" >{{item.value}}</i-tag>
-                </view>
-              </i-card>
-            </view>
+            <div class="contain">
+            <i-row>
+              <i-col span="4"><img class="icon" :src="iconMap[item.name]"/></i-col>
+              <i-col span="20">
+                <i-row> <i-tag class="i-tags" name="1" color="yellow">{{item.addr}}#{{item.name}}</i-tag></i-row>
+                <i-row> <i-tag class="i-tags" name="1" :color= iconMap[item.link] >{{item.link}}</i-tag>
+                <i-tag class="i-tags" name="1" :color= iconMap[item.can] >{{item.can}}</i-tag>
+                <i-tag class="i-tags" name="1" color="green" >{{item.value}}</i-tag></i-row>
+              </i-col>
+            </i-row>
+            </div>
           </view>
         </i-sticky-item>
          </i-sticky>
@@ -66,7 +73,7 @@
   export default {
     data() {
       return {
-        list: [{ time: '--:--:--' }],
+        list: [],
         time: '--:--:--',
         position: '',
         version: '',
@@ -96,8 +103,8 @@
         title: '分站实时数据',
       });
     },
-    onPageScroll(event) {
-      this.scrollTop = event.scrollTop;
+    onPageScroll() {
+      this.scrollTop = 1;
     },
     onPullDownRefresh() {
       wx.showLoading();
@@ -132,10 +139,28 @@
     },
     onUnload() {
       this.fresh = null;
+      this.scrollTop = 0;
     },
   };
 </script>
 <style lang="less" scoped>
   @import '../../styles/mixin';
-
+.icon{
+  width: 105rpx;
+  height: 105rpx;
+  box-shadow:0 0 15px rgb(15, 112, 141) inset,0 0 5px rgb(15, 112, 141);
+}
+.icon1{
+  width: 48rpx;
+  height: 48rpx;
+  box-shadow:0 0 15px rgb(15, 112, 141) inset,0 0 5px rgb(15, 112, 141);
+  margin-top: 5rpx;
+}
+.contain{
+  margin-top: 15rpx;
+  box-shadow:0 0 5px rgb(50, 52, 53);
+}
+.contain1{
+  margin-top: 5rpx;
+}
 </style>

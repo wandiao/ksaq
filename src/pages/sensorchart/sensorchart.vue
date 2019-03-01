@@ -1,20 +1,34 @@
 <template>
   <div>
-    <i-card full="true" :title="name" :thumb="iconMap[name]">
-      <view slot="content">
-        <i-tag class="i-tags" name="1" color="blue">{{addr}}#{{name}}</i-tag>
-        <i-tag class="i-tags" name="1" :color="iconMap[link]">{{link}}</i-tag>
-        <i-tag class="i-tags" name="1" :color="iconMap[can]">{{can}}</i-tag>
-        <i-tag class="i-tags" name="1" color="green">{{value}}</i-tag>
-        <i-tag class="i-tags" name="1" color="blue">{{time}}</i-tag>
-      </view>
-    </i-card>
-    <div class="echarts-wrap">
-      <i-tag class="i-tags" name="1" color="green">实时曲线</i-tag>
+    <div class="contain">
+      <i-row>
+        <i-col span="4">
+          <img class="icon" :src="iconMap[name]">
+        </i-col>
+        <i-col span="20">
+          <i-row>
+            <i-tag class="i-tags" name="1" color="yellow">{{addr}}#{{name}}</i-tag>
+          </i-row>
+          <i-row>
+            <i-tag class="i-tags" name="1" :color="iconMap[link]">{{link}}</i-tag>
+            <i-tag class="i-tags" name="1" :color="iconMap[can]">{{can}}</i-tag>
+            <i-tag class="i-tags" name="1" color="green">{{time}}</i-tag>
+            <i-tag class="i-tags" name="1" color="yellow">{{value}}</i-tag>
+          </i-row>
+        </i-col>
+      </i-row>
+    </div>
+    <div class="echarts-wrap1">
+      <i-row>
+        <i-col offset="10" span="14"><i-tag class="i-tags" name="1" color="green">实时曲线</i-tag></i-col>
+      </i-row>
       <mpvue-echarts :echarts="echarts" :onInit="curInit" canvasId="lin1"/>
-      <i-tag class="i-tags" name="1" color="yellow">历史曲线</i-tag>
+    </div>
+    <div class="echarts-wrap">
+      <i-row>
+        <i-col offset="10" span="14"><i-tag class="i-tags" name="1" color="yellow">历史曲线</i-tag></i-col>
+      </i-row>
       <mpvue-echarts :echarts="echarts" :onInit="logInit" canvasId="line"/>
-      
     </div>
   </div>
 </template>
@@ -70,22 +84,18 @@ var unit = "%";
 function getBarOption() {
   return {
     grid: {
-                left: 15,
-                right: 15,
-                bottom: 45,
-                top: 15,
-                containLabel: true
-              },
-      title : {
-            show:true,//显示策略，默认值true,可选为：true（显示） | false（隐藏）
-            text: '历史曲线',//主标题文本，'\n'指定换行
-      },
+      left: 15,
+      right: 15,
+      bottom: 60,
+      top: 10,
+      containLabel: true
+    },
     backgroundColor: "", //背景颜色透明
     calculable: true,
     tooltip: {
       trigger: "axis",
       formatter: `采集时间：{b0}\n监测值：{c0}${unit}`,
-      backgroundColor: "rgba(72, 209, 204, 0.6)",
+      backgroundColor: "rgba(238, 180, 34, 0.6)",
       borderWidth: 3,
       borderColor: "#ccc",
       textStyle: {
@@ -93,10 +103,11 @@ function getBarOption() {
       },
       axisPointer: {
         show: true,
-        type: "cross",
+        type: "line",
         lineStyle: {
-          type: "solid",
-          width: 2
+          color: "#FF7F00",
+          type: "line",
+          width: 1
         },
         label: {
           show: false
@@ -111,12 +122,14 @@ function getBarOption() {
     dataZoom: [
       {
         type: "slider",
+        left:"25",
+        bottom:"30",
         realtime: true,
+        backgroundColor: 'rgba(238,180,34,0)',
         show: true,
         start: 0,
         end: 100,
-        handleIcon:
-          "M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
+        handleIcon:"M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
         handleSize: "100%",
         handleStyle: {
           color: "#fff",
@@ -131,12 +144,26 @@ function getBarOption() {
       type: "category",
       boundaryGap: true,
       data: listx,
-      show: true
+      show: true,
+      axisLine:{
+        lineStyle:{
+        color:'#FF7F00',
+        }
+     } 
     },
     yAxis: {
       x: "center",
       type: "value",
-      show: true
+      show: true,
+      "splitLine": {     //网格线
+          "show": false
+        },
+        scale: true,
+      axisLine:{
+        lineStyle:{
+        color:'#FF7F00',
+        }
+     }
     },
     series: [
       {
@@ -151,11 +178,11 @@ function getBarOption() {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: "#d7f4f8" // 0% 处的颜色
+                color: "#FFEBCD" // 0% 处的颜色
               },
               {
                 offset: 0.3,
-                color: "#eefcfd" // 100% 处的颜色
+                color: "#FFD39B" // 100% 处的颜色
               },
               {
                 offset: 1,
@@ -166,16 +193,16 @@ function getBarOption() {
               // 系列级个性化折线样式
               width: 2,
               type: "solid",
-              color: "#4fd6d2"
+              color: "#FF7F00"
             }
           },
           emphasis: {
-            color: "#4fd6d2",
+            color: "#FF7F00",
             lineStyle: {
               // 系列级个性化折线样式
               width: 2,
               type: "dotted",
-              color: "#4fd6d2" //折线的颜色
+              color: "#FF7F00" //折线的颜色
             }
           }
         }, //线条样式
@@ -246,9 +273,9 @@ export default {
             this.value = res.data.value;
             this.addr = res.data.addr;
             this.time = res.data.time;
-            if(curx.length >= 600){
-              curx.splice(0,1);
-              cury.splice(0,1);
+            if (curx.length >= 1800) {
+              curx.splice(0, 1);
+              cury.splice(0, 1);
             }
             curx.push(res.data.time);
             cury.push(res.data.listenvalue);
@@ -256,7 +283,7 @@ export default {
               grid: {
                 left: 15,
                 right: 15,
-                bottom: 5,
+                bottom: 25,
                 top: 15,
                 containLabel: true
               },
@@ -278,10 +305,11 @@ export default {
                 },
                 axisPointer: {
                   show: true,
-                  type: "cross",
+                  type: "line",
                   lineStyle: {
-                    type: "solid",
-                    width: 2
+                    color: "#4fd6d2",
+                    type: "line",
+                    width: 1
                   },
                   label: {
                     show: false
@@ -297,12 +325,26 @@ export default {
                 type: "category",
                 boundaryGap: true,
                 data: curx,
-                show: true
+                show: true,
+                axisLine:{
+                  lineStyle:{
+                  color:'#00C5CD',
+                  }
+                }
               },
               yAxis: {
                 x: "center",
+                "splitLine": {     //网格线
+          "show": false
+        },
                 type: "value",
-                show: true
+                show: true,
+                scale: true,
+                axisLine:{
+                  lineStyle:{
+                  color:'#00C5CD',
+                  }
+                }
               },
               series: [
                 {
@@ -350,8 +392,10 @@ export default {
                 }
               ]
             };
-            if(curchart != null)
+            if (curchart != null) 
+            {
               curchart.setOption(option1);
+            }
           }
         });
       }
@@ -418,7 +462,32 @@ export default {
 <style lang="less" scoped>
 @import "../../styles/mixin";
 .echarts-wrap {
-  width: 100%;
-  height: 480rpx;
+  margin-top: 25rpx;
+  margin-left: 15rpx;
+  width: 96%;
+  height: 490rpx;
+  box-shadow:  0 0 10px rgb(187, 97, 13);
+}
+.echarts-wrap1 {
+  margin-top: 15rpx;
+  width: 96%;
+  margin-left: 15rpx;
+  height: 450rpx;
+  box-shadow:  0 0 10px rgb(10, 155, 148);
+}
+.icon {
+  width: 105rpx;
+  height: 105rpx;
+  box-shadow: 0 0 15px rgb(15, 112, 141) inset, 0 0 5px rgb(15, 112, 141);
+}
+.icon1 {
+  width: 55rpx;
+  height: 55rpx;
+  box-shadow: 0 0 15px rgb(15, 112, 141) inset, 0 0 5px rgb(15, 112, 141);
+  margin-top: 5rpx;
+}
+.contain {
+  margin-top: 20rpx;
+  box-shadow: 0 0 5px rgb(50, 52, 53);
 }
 </style>

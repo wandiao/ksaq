@@ -20,6 +20,9 @@
     "i-panel": "/static/iview/panel/index",
     "i-sticky": "/static/iview/sticky/index",
     "i-sticky-item": "/static/iview/sticky-item/index",
+    "i-tabs": "/static/iview/tabs/index",
+    "i-tab": "/static/iview/tab/index",
+    "i-notice-bar": "/static/iview/notice-bar/index",
     "i-swipeout": "/static/iview/swipeout/index"
   }
 }

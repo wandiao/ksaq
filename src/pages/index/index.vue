@@ -1,12 +1,22 @@
 <template>
   <div class="home container">
-    <i-card full="true" :title=item.position :thumb="iconMap['综合分站']" v-for="(item, index) in list" :key="index" @click="jump(item.ip, item.position, item.version)">
-      <view slot="content">
-        <i-tag class="i-tags" name="1" color="blue" >{{item.ip}}</i-tag>
-        <i-tag class="i-tags" name="1" color="green" >{{item.mac}}</i-tag>
-        <i-tag class="i-tags" name="1" color="blue" >{{item.version}}</i-tag>
-      </view>
-    </i-card>      
+    <div class="contain" v-for="(item, index) in list" :key="index" @click="jump(item.ip, item.position, item.version)">
+      <i-row>
+          <i-col span="5"><img class="icon" :src="iconMap['综合分站']"/></i-col>
+          <i-col span="19">
+            <div class="tags">
+              <i-row><i-tag class="i-tags" name="1" color="yellow" >{{item.position}}</i-tag></i-row>
+              <i-row>
+                <div class="tags">
+                  <i-tag class="i-tags" name="1" color="blue" >{{item.ip}}</i-tag>
+                  <i-tag class="i-tags" name="1" color="green" >{{item.mac}}</i-tag>
+                  <i-tag class="i-tags" name="1" color="blue" >{{item.version}}</i-tag>
+                </div>
+              </i-row>
+            </div>
+          </i-col>
+      </i-row>
+    </div>    
   </div>
 </template>
 
@@ -49,6 +59,8 @@
       return {
         list: [],
         iconMap,
+        current: 'tab1',
+        current_scroll: 'tab1',
       };
     },
     methods: {
@@ -90,4 +102,19 @@
 
 <style lang="less" scoped>
   @import '../../styles/mixin';
+.icon{
+  width: 128rpx;
+  height: 128rpx;
+  box-shadow:0 0 15px rgb(15, 112, 141) inset,0 0 5px rgb(15, 112, 141);
+}
+.contain{
+  margin-bottom: 10rpx;
+  box-shadow:0 0 5px rgb(50, 52, 53);
+}
+.tags{
+  margin-top: 10rpx;
+}
+.tags1{
+  margin-top: 10rpx;
+}
 </style>
