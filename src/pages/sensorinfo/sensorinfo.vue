@@ -5,23 +5,23 @@
           <view slot="title">
             <div class="title">
               <i-col span="24">
-                <i-tag class="i-tags" name="1" color="yellow" >{{position}}</i-tag>
-                <i-tag class="i-tags" name="1" color="green" >{{ip}}</i-tag>
-                <i-tag class="i-tags" name="1" color="blue" >{{version}}</i-tag>
-                <i-tag class="i-tags" name="1" color="green" >{{time}}</i-tag>
+                <i-tag class="i-tags" name="1" color="yellow" type="border">{{position}}</i-tag>
+                <i-tag class="i-tags" name="1" color="green" type="border">{{ip}}</i-tag>
+                <i-tag class="i-tags" name="1" color="blue" type="border">{{version}}</i-tag>
+                <i-tag class="i-tags" name="1" color="yellow" type="border">{{time}}</i-tag>
               </i-col>
             </div>
           </view>
           <view slot="content" v-for="(item, index) in list" :key="index" @click="showchart(item.ipandaddr,item.addr,item.name,ip,unit)">
             <div class="contain">
             <i-row>
-              <i-col span="4"><img class="icon" :src="iconMap[item.name]"/></i-col>
-              <i-col span="20">
+              <i-col span="3"><img class="icon" :src="iconMap[item.name]"/></i-col>
+              <i-col span="21">
                 <i-col span = "12">
-                  <i-row>{{item.addr}}#{{item.name}}</i-row>
+                  <i-row><div class="addr">{{item.addr}}#{{item.name}}</div></i-row>
                   <i-row> 
-                    <img class="icon2" :src="iconMap[item.link]"/>
-                    <img class="icon2" :src="iconMap[item.can]"/>
+                      <img class="icon2" :src="iconMap[item.link]"/>
+                      <img class="icon2" :src="iconMap[item.can]"/>
                   </i-row>
                 </i-col>
                 <i-col span="12"><div class="value">{{item.value}}</div></i-col>
@@ -143,52 +143,41 @@
       this.list = [];
       this.fresh = null;
       this.scrollTop = 0;
-      wx.showLoading();
-      wx.request({
-        url: `https://api.zouyang.ltd/curinfo?ip=${this.ip}`,
-        success: (res) => {
-          wx.hideLoading();
-          this.list = res.data;
-          wx.stopPullDownRefresh();
-        },
-      });
     },
   };
 </script>
 <style lang="less" scoped>
-  @import '../../styles/mixin';
 .icon{
-  width: 105rpx;
-  height: 105rpx;
-  box-shadow:0 0 15px rgb(15, 112, 141) inset,0 0 5px rgb(15, 112, 141);
-}
-.icon1{
-  width: 48rpx;
-  height: 48rpx;
-  box-shadow:0 0 15px rgb(15, 112, 141) inset,0 0 5px rgb(15, 112, 141);
-  margin-top: 5rpx;
+  width: 90rpx;
+  height: 90rpx;
+  box-shadow:0 0 5px rgb(53, 155, 185) inset;
+  border-radius:10rpx;
 }
 .icon2{
   width: 36rpx;
   height: 36rpx;
-  margin-top: 10rpx;
 }
 .value{
   text-align:right; /*水平居中*/
-  line-height: 105rpx; /*行距设为与div高度一致*/
-  color: rgb(43, 146, 124);
+  line-height: 96rpx; /*行距设为与div高度一致*/
+  color: rgb(1, 143, 112);
 }
 .contain{
-  margin-top: 5rpx;
+  margin-top: 8rpx;
   box-shadow:0 0 5px rgb(107, 111, 112);
   width: 97%;
   margin-left: 10rpx;
   border-radius:10rpx;
+  height: 90rpx;
 }
 .contain1{
   margin-top: 5rpx;
 }
 .title{
   text-align:center; /*水平居中*/
+}
+.addr{
+  text-align: left;
+  font-size: 32rpx;
 }
 </style>

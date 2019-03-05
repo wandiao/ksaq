@@ -1,23 +1,23 @@
 <template>
   <div>
     <div class="contain">
-            <i-row>
-              <i-col span="4"><img class="icon" :src="iconMap[name]"/></i-col>
-              <i-col span="20">
-                <i-col span = "14">
-                  <i-row> 
-                    <i-tag class="i-tags" name="1" color="yellow">{{addr}}#{{name}}</i-tag>
-                    <i-tag class="i-tags" name="1" color="green">{{time}}</i-tag>
-                  </i-row>
-                  <i-row> 
-                    <img class="icon2" :src="iconMap[link]"/>
-                    <img class="icon2" :src="iconMap[can]"/>
-                  </i-row>
-                </i-col>
-                <i-col span="10"><div class="value">{{value}}</div></i-col>
-              </i-col>
-            </i-row>
-            </div>
+      <i-row>
+        <i-col span="4"><img class="icon" :src="iconMap[name]"/></i-col>
+        <i-col span="20">
+        <i-col span = "14">
+        <i-row> 
+        <i-tag class="i-tags" name="1" color="yellow" type="border">{{addr}}#{{name}}</i-tag>
+        <i-tag class="i-tags" name="1" color="green" type="border">{{time}}</i-tag>
+        </i-row>
+          <i-row> 
+          <img class="icon2" :src="iconMap[link]"/>
+          <img class="icon2" :src="iconMap[can]"/>
+          </i-row>
+          </i-col>
+          <i-col span="10"><div class="value">{{value}}</div></i-col>
+          </i-col>
+          </i-row>
+          </div>
     <div class="echarts-wrap1">
       <i-row>
         <i-col offset="10" span="14"><i-tag class="i-tags" name="1" color="green">实时曲线</i-tag></i-col>
@@ -57,13 +57,13 @@ const iconMap = {
   转换器: "/static/images/common/switcher.png",
   风筒: "/static/images/common/fengtong.png",
   电源: "/static/images/common/power.png",
- CAN1: '/static/images/common/index1.png',
-    CAN2: '/static/images/common/index2.png',
-    CAN3: '/static/images/common/index3.png',
-    CAN4: '/static/images/common/index4.png',
-    CANNONE: '/static/images/common/none.png',
-    正常: '/static/images/common/link.png',
-    中断: '/static/images/common/linkbreak.png',
+  CAN1: '/static/images/common/index1.png',
+  CAN2: '/static/images/common/index2.png',
+  CAN3: '/static/images/common/index3.png',
+  CAN4: '/static/images/common/index4.png',
+  CANNONE: '/static/images/common/none.png',
+  正常: '/static/images/common/link.png',
+  中断: '/static/images/common/linkbreak.png',
   未知: "/static/images/common/linkbreak.png",
   等待连接: "/static/images/common/waitlink.png",
   综合分站: "/static/images/common/station.png",
@@ -127,8 +127,8 @@ function getBarOption() {
       },
       position: function(point, params, dom, rect, size) {
         if (point[0] > size.viewSize[0] / 2)
-          return [point[0] - 125, point[1] - 80];
-        else return [point[0] + 20, point[1] - 80];
+          return [point[0] - 125, point[1] - 65];
+        else return [point[0] + 20, point[1] - 65];
       }
     },
     dataZoom: [
@@ -137,7 +137,6 @@ function getBarOption() {
         left:"25",
         bottom:"30",
         realtime: true,
-        backgroundColor: 'rgba(238,180,34,0)',
         show: true,
         start: 0,
         end: 100,
@@ -352,9 +351,9 @@ export default {
                 },
                 position: function(point, params, dom, rect, size) {
                   if (point[0] > size.viewSize[0] / 2)
-                    return [point[0] - 125, point[1] - 80];
+                    return [point[0] - 125, point[1] - 65];
                   else 
-                    return [point[0] + 20, point[1] - 80];
+                    return [point[0] + 20, point[1] - 65];
                 }
               },
               xAxis: {
@@ -476,8 +475,6 @@ export default {
     this.unit = '';
   },
   onPullDownRefresh() {
-    curx = [];
-    cury = [];
     wx.request({
       url: `https://api.zouyang.ltd/sensorinfologs?ipandaddr=${this.ipandaddr}`,
       success: res => {
@@ -517,12 +514,13 @@ export default {
 .icon {
   width: 105rpx;
   height: 105rpx;
-  box-shadow: 0 0 15px rgb(15, 112, 141) inset, 0 0 5px rgb(15, 112, 141);
+  box-shadow:0 0 5px rgb(53, 155, 185) inset;
+  border-radius:10rpx;
 }
 .icon1 {
   width: 55rpx;
   height: 55rpx;
-  box-shadow: 0 0 15px rgb(15, 112, 141) inset, 0 0 5px rgb(15, 112, 141);
+  box-shadow: 0 0 15px rgb(15, 112, 141) inset, 0 0 5px rgb(70, 116, 129);
   margin-top: 5rpx;
 }
 .icon2{
@@ -535,10 +533,11 @@ export default {
   line-height: 105rpx; /*行距设为与div高度一致*/
 }
 .contain {
+  height: 105rpx;
   margin-top: 10rpx;
+  margin-left: 10rpx;
   box-shadow: 0 0 5px rgb(50, 52, 53);
   width: 97%;
-  margin-left: 10rpx;
   border-radius:10rpx;
 }
 </style>
