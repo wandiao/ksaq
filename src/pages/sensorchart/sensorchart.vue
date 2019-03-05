@@ -1,23 +1,23 @@
 <template>
   <div>
     <div class="contain">
-      <i-row>
-        <i-col span="4">
-          <img class="icon" :src="iconMap[name]">
-        </i-col>
-        <i-col span="20">
-          <i-row>
-            <i-tag class="i-tags" name="1" color="yellow">{{addr}}#{{name}}</i-tag>
-          </i-row>
-          <i-row>
-            <i-tag class="i-tags" name="1" :color="iconMap[link]">{{link}}</i-tag>
-            <i-tag class="i-tags" name="1" :color="iconMap[can]">{{can}}</i-tag>
-            <i-tag class="i-tags" name="1" color="green">{{time}}</i-tag>
-            <i-tag class="i-tags" name="1" color="yellow">{{value}}</i-tag>
-          </i-row>
-        </i-col>
-      </i-row>
-    </div>
+            <i-row>
+              <i-col span="4"><img class="icon" :src="iconMap[name]"/></i-col>
+              <i-col span="20">
+                <i-col span = "14">
+                  <i-row> 
+                    <i-tag class="i-tags" name="1" color="yellow">{{addr}}#{{name}}</i-tag>
+                    <i-tag class="i-tags" name="1" color="green">{{time}}</i-tag>
+                  </i-row>
+                  <i-row> 
+                    <img class="icon2" :src="iconMap[link]"/>
+                    <img class="icon2" :src="iconMap[can]"/>
+                  </i-row>
+                </i-col>
+                <i-col span="10"><div class="value">{{value}}</div></i-col>
+              </i-col>
+            </i-row>
+            </div>
     <div class="echarts-wrap1">
       <i-row>
         <i-col offset="10" span="14"><i-tag class="i-tags" name="1" color="green">实时曲线</i-tag></i-col>
@@ -57,13 +57,13 @@ const iconMap = {
   转换器: "/static/images/common/switcher.png",
   风筒: "/static/images/common/fengtong.png",
   电源: "/static/images/common/power.png",
-  CAN1: "blue",
-  CAN2: "blue",
-  CAN3: "blue",
-  CAN4: "blue",
-  "": "red",
-  正常: "green",
-  中断: "red",
+ CAN1: '/static/images/common/index1.png',
+    CAN2: '/static/images/common/index2.png',
+    CAN3: '/static/images/common/index3.png',
+    CAN4: '/static/images/common/index4.png',
+    CANNONE: '/static/images/common/none.png',
+    正常: '/static/images/common/link.png',
+    中断: '/static/images/common/linkbreak.png',
   未知: "/static/images/common/linkbreak.png",
   等待连接: "/static/images/common/waitlink.png",
   综合分站: "/static/images/common/station.png",
@@ -82,6 +82,18 @@ var listx = [],
 var res;
 var unit = "%";
 function getBarOption() {
+  var listy2 = [];
+  for(var j=0;j<listy.length;j++){
+    listy2.push(listy[j]);
+  }
+            listy2.sort(function(a,b){
+              return a-b;
+            });
+            var sum=0;
+            for(var i=0;i<listy2.length;i++){
+              sum+=listy2[i];
+            }
+  var svg = (Math.ceil(listy2[listy2.length-1])-Math.floor(listy2[0]))/10;
   return {
     grid: {
       left: 15,
@@ -115,8 +127,8 @@ function getBarOption() {
       },
       position: function(point, params, dom, rect, size) {
         if (point[0] > size.viewSize[0] / 2)
-          return [point[0] - 135, point[1] - 100];
-        else return [point[0] + 20, point[1] - 100];
+          return [point[0] - 125, point[1] - 80];
+        else return [point[0] + 20, point[1] - 80];
       }
     },
     dataZoom: [
@@ -152,13 +164,20 @@ function getBarOption() {
      } 
     },
     yAxis: {
-      x: "center",
+      // x: "center",
       type: "value",
-      show: true,
+    //   show: true,
       "splitLine": {     //网格线
-          "show": false
+          "show": true,
+          "lineStyle":{
+          color:"#FFD39B",
+          }
         },
-        scale: true,
+    //     scale:true,
+        minInterval: svg,
+    //     // min: (listy2[0]-svg) > 0 ? (listy2[0]-svg):0 ,
+    //   // max: Math.floor(listy2[listy2.length-1]+svg);
+    //   boundaryGap: ["0%", "0%"],
       axisLine:{
         lineStyle:{
         color:'#FF7F00',
@@ -245,7 +264,8 @@ export default {
       addr: "",
       fresh: null,
       ip: "",
-      time: ""
+      time: "--:--:--",
+      unit1:"%",
     };
   },
   onLoad(options) {
@@ -254,6 +274,7 @@ export default {
     this.name = options.name;
     this.fresh = "1";
     this.ip = options.ip;
+    unit = options.unit;
     wx.setNavigationBarTitle({
       title: "传感器历史数据"
     });
@@ -272,13 +293,27 @@ export default {
             this.can = res.data.can;
             this.value = res.data.value;
             this.addr = res.data.addr;
-            this.time = res.data.time;
-            if (curx.length >= 1800) {
+            unit = res.data.unit;
+            if (curx.length >= 180) {
               curx.splice(0, 1);
               cury.splice(0, 1);
             }
+            if(res.data.link != '中断'){
+            this.time = res.data.time;
             curx.push(res.data.time);
             cury.push(res.data.listenvalue);
+            var listy2 = [];
+  for(var j=0;j<cury.length;j++){
+    listy2.push(cury[j]);
+  }
+            listy2.sort(function(a,b){
+              return a-b;
+            });
+            var sum=0;
+            for(var i=0;i<listy2.length;i++){
+              sum+=listy2[i];
+            }
+            var svg = (Math.ceil(listy2[listy2.length-1])-Math.floor(listy2[0]))/10;
             var option1 = {
               grid: {
                 left: 15,
@@ -296,7 +331,7 @@ export default {
               calculable: true,
               tooltip: {
                 trigger: "axis",
-                formatter: `采集时间：{b0}\n监测值：{c0}${unit}`,
+                formatter: `采集时间：{b0}\n监测值：{c0}${res.data.unit}`,
                 backgroundColor: "rgba(72, 209, 204, 0.6)",
                 borderWidth: 3,
                 borderColor: "#ccc",
@@ -317,8 +352,9 @@ export default {
                 },
                 position: function(point, params, dom, rect, size) {
                   if (point[0] > size.viewSize[0] / 2)
-                    return [point[0] - 135, point[1] - 100];
-                  else return [point[0] + 20, point[1] - 100];
+                    return [point[0] - 125, point[1] - 80];
+                  else 
+                    return [point[0] + 20, point[1] - 80];
                 }
               },
               xAxis: {
@@ -334,12 +370,20 @@ export default {
               },
               yAxis: {
                 x: "center",
-                "splitLine": {     //网格线
-          "show": false
-        },
+                splitLine: {     //网格线
+                show: true,
+                interval:"0",
+                lineStyle:{
+                    color:"#4fd6d2",
+                }
+                },
                 type: "value",
                 show: true,
-                scale: true,
+                minInterval: svg,
+                // scale:true,
+                // min: (listy2[0]-svg) > 0 ? (listy2[0]-svg):0 ,
+                // max: listy2[listy2.length-1]+svg,
+                boundaryGap: ["0%", "0%"],
                 axisLine:{
                   lineStyle:{
                   color:'#00C5CD',
@@ -397,36 +441,31 @@ export default {
               curchart.setOption(option1);
             }
           }
+        }
         });
       }
     }, 1000);
     setInterval(() => {
-      if (chart != null) {
-        if (this.ipandaddr != null && this.fresh != null) {
-          if (this.ipandaddr != this.freshaddr) {
-            wx.request({
-              url: `https://api.zouyang.ltd/sensorinfologs?ipandaddr=${
-                this.ipandaddr
-              }`,
-              success: res => {
-                var listx1 = [];
-                var listy1 = [];
-                for (var i = 0; i < res.data.length; i++) {
-                  listx1.push(res.data[i].time);
-                  listy1.push(res.data[i].listenvalue);
-                }
-                listx = listx1;
-                listy = listy1;
-                unit = res.data[0].unit;
-                chart.setOption(getBarOption());
-                this.freshaddr = this.ipandaddr;
-                wx.hideLoading();
-              }
-            });
+      if ((chart != null) && (this.ipandaddr != null) && (this.fresh != null) && (this.ipandaddr != this.freshaddr)) {
+          wx.request({
+          url: `https://api.zouyang.ltd/sensorinfologs?ipandaddr=${this.ipandaddr}`,
+            success: res => {
+            var listx1 = [];
+            var listy1 = [];
+            for (var i = 0; i < res.data.length; i++) {
+              listx1.push(res.data[i].time);
+              listy1.push(res.data[i].listenvalue);
+            }
+            listx = listx1;
+            listy = listy1;
+            unit = res.data[0].unit;
+            chart.setOption(getBarOption());
+            this.freshaddr = this.ipandaddr;
+            wx.hideLoading();
           }
-        }
+        });
       }
-    }, 100);
+    }, 350);
   },
   onUnload() {
     this.ipandaddr = null;
@@ -434,6 +473,7 @@ export default {
     this.fresh = null;
     curx = [];
     cury = [];
+    this.unit = '';
   },
   onPullDownRefresh() {
     curx = [];
@@ -449,7 +489,6 @@ export default {
         }
         listx = listx1;
         listy = listy1;
-        unit = res.data[0].unit;
         chart.setOption(getBarOption());
         wx.hideLoading();
         this.freshaddr = this.ipandaddr;
@@ -465,15 +504,15 @@ export default {
   margin-top: 25rpx;
   margin-left: 15rpx;
   width: 96%;
-  height: 490rpx;
-  box-shadow:  0 0 10px rgb(187, 97, 13);
+  height: 500rpx;
+  box-shadow:  0 0 10px rgb(221, 124, 34);
 }
 .echarts-wrap1 {
   margin-top: 15rpx;
   width: 96%;
   margin-left: 15rpx;
   height: 450rpx;
-  box-shadow:  0 0 10px rgb(10, 155, 148);
+  box-shadow:  0 0 10rpx rgb(10, 155, 148);
 }
 .icon {
   width: 105rpx;
@@ -486,8 +525,20 @@ export default {
   box-shadow: 0 0 15px rgb(15, 112, 141) inset, 0 0 5px rgb(15, 112, 141);
   margin-top: 5rpx;
 }
+.icon2{
+  width: 36rpx;
+  height: 36rpx;
+  margin-top: 10rpx;
+}
+.value{
+  text-align:right; /*水平居中*/
+  line-height: 105rpx; /*行距设为与div高度一致*/
+}
 .contain {
-  margin-top: 20rpx;
+  margin-top: 10rpx;
   box-shadow: 0 0 5px rgb(50, 52, 53);
+  width: 97%;
+  margin-left: 10rpx;
+  border-radius:10rpx;
 }
 </style>

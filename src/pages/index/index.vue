@@ -2,18 +2,16 @@
   <div class="home container">
     <div class="contain" v-for="(item, index) in list" :key="index" @click="jump(item.ip, item.position, item.version)">
       <i-row>
-          <i-col span="5"><img class="icon" :src="iconMap['综合分站']"/></i-col>
-          <i-col span="19">
-            <div class="tags">
-              <i-row><i-tag class="i-tags" name="1" color="yellow" >{{item.position}}</i-tag></i-row>
+          <i-col span="4"><img class="icon" :src="iconMap['综合分站']"/></i-col>
+          <i-col span="20">
+              <i-row><div class="tags">{{item.position}}</div></i-row>
               <i-row>
-                <div class="tags">
+                <div class="tags1">
                   <i-tag class="i-tags" name="1" color="blue" >{{item.ip}}</i-tag>
                   <i-tag class="i-tags" name="1" color="green" >{{item.mac}}</i-tag>
-                  <i-tag class="i-tags" name="1" color="blue" >{{item.version}}</i-tag>
+                  <i-tag class="i-tags" name="1" color="yellow" >{{item.version}}</i-tag>
                 </div>
               </i-row>
-            </div>
           </i-col>
       </i-row>
     </div>    
@@ -103,18 +101,23 @@
 <style lang="less" scoped>
   @import '../../styles/mixin';
 .icon{
-  width: 128rpx;
-  height: 128rpx;
+  width: 115rpx;
+  height: 115rpx;
   box-shadow:0 0 15px rgb(15, 112, 141) inset,0 0 5px rgb(15, 112, 141);
 }
 .contain{
-  margin-bottom: 10rpx;
-  box-shadow:0 0 5px rgb(50, 52, 53);
+  margin-top: 5rpx;
+  box-shadow:0 0 5px rgb(97, 99, 100);
+  width: 97%;
+  margin-left: 10rpx;
+  border-radius:10rpx;
 }
 .tags{
-  margin-top: 10rpx;
+  margin-left: 10rpx;
+  line-height: 55rpx; /*行距设为与div高度一致*/
 }
 .tags1{
-  margin-top: 10rpx;
+  margin-left: 10rpx;
+  line-height: 55rpx; /*行距设为与div高度一致*/
 }
 </style>

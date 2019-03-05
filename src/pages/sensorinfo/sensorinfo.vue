@@ -3,26 +3,28 @@
     <i-sticky :scrollTop="scrollTop">
         <i-sticky-item i-class="i-sticky-demo-title">
           <view slot="title">
-              <i-col span="3"><div class="contain1">
-                <img class="icon1" :src="iconMap['综合分站']" />
-                </div>
-                </i-col>
-              <i-col span="21">
+            <div class="title">
+              <i-col span="24">
                 <i-tag class="i-tags" name="1" color="yellow" >{{position}}</i-tag>
                 <i-tag class="i-tags" name="1" color="green" >{{ip}}</i-tag>
                 <i-tag class="i-tags" name="1" color="blue" >{{version}}</i-tag>
                 <i-tag class="i-tags" name="1" color="green" >{{time}}</i-tag>
               </i-col>
+            </div>
           </view>
-          <view slot="content" v-for="(item, index) in list" :key="index" @click="showchart(item.ipandaddr,item.addr,item.name,ip)">
+          <view slot="content" v-for="(item, index) in list" :key="index" @click="showchart(item.ipandaddr,item.addr,item.name,ip,unit)">
             <div class="contain">
             <i-row>
               <i-col span="4"><img class="icon" :src="iconMap[item.name]"/></i-col>
               <i-col span="20">
-                <i-row> <i-tag class="i-tags" name="1" color="yellow">{{item.addr}}#{{item.name}}</i-tag></i-row>
-                <i-row> <i-tag class="i-tags" name="1" :color= iconMap[item.link] >{{item.link}}</i-tag>
-                <i-tag class="i-tags" name="1" :color= iconMap[item.can] >{{item.can}}</i-tag>
-                <i-tag class="i-tags" name="1" color="green" >{{item.value}}</i-tag></i-row>
+                <i-col span = "12">
+                  <i-row>{{item.addr}}#{{item.name}}</i-row>
+                  <i-row> 
+                    <img class="icon2" :src="iconMap[item.link]"/>
+                    <img class="icon2" :src="iconMap[item.can]"/>
+                  </i-row>
+                </i-col>
+                <i-col span="12"><div class="value">{{item.value}}</div></i-col>
               </i-col>
             </i-row>
             </div>
@@ -52,13 +54,13 @@
     转换器: '/static/images/common/switcher.png',
     风筒: '/static/images/common/fengtong.png',
     电源: '/static/images/common/power.png',
-    CAN1: 'blue',
-    CAN2: 'blue',
-    CAN3: 'blue',
-    CAN4: 'blue',
-    CANNONE: 'red',
-    正常: 'green',
-    中断: 'red',
+    CAN1: '/static/images/common/index1.png',
+    CAN2: '/static/images/common/index2.png',
+    CAN3: '/static/images/common/index3.png',
+    CAN4: '/static/images/common/index4.png',
+    CANNONE: '/static/images/common/none.png',
+    正常: '/static/images/common/link.png',
+    中断: '/static/images/common/linkbreak.png',
     未知: '/static/images/common/linkbreak.png',
     等待连接: '/static/images/common/waitlink.png',
     综合分站: '/static/images/common/station.png',
@@ -84,10 +86,10 @@
       };
     },
     methods: {
-      showchart(ipandaddr, addr, name, ip) {
+      showchart(ipandaddr, addr, name, ip, unit) {
         this.fresh = null;
         wx.navigateTo({
-          url: `/pages/sensorchart/main?ipandaddr=${ipandaddr}&addr=${addr}&name=${name}&ip=${ip}`,
+          url: `/pages/sensorchart/main?ipandaddr=${ipandaddr}&addr=${addr}&name=${name}&ip=${ip}&unit=${unit}`,
         });
       },
       getcolor(can) {
@@ -138,8 +140,18 @@
       this.fresh = '1';
     },
     onUnload() {
+      this.list = [];
       this.fresh = null;
       this.scrollTop = 0;
+      wx.showLoading();
+      wx.request({
+        url: `https://api.zouyang.ltd/curinfo?ip=${this.ip}`,
+        success: (res) => {
+          wx.hideLoading();
+          this.list = res.data;
+          wx.stopPullDownRefresh();
+        },
+      });
     },
   };
 </script>
@@ -156,11 +168,27 @@
   box-shadow:0 0 15px rgb(15, 112, 141) inset,0 0 5px rgb(15, 112, 141);
   margin-top: 5rpx;
 }
+.icon2{
+  width: 36rpx;
+  height: 36rpx;
+  margin-top: 10rpx;
+}
+.value{
+  text-align:right; /*水平居中*/
+  line-height: 105rpx; /*行距设为与div高度一致*/
+  color: rgb(43, 146, 124);
+}
 .contain{
-  margin-top: 15rpx;
-  box-shadow:0 0 5px rgb(50, 52, 53);
+  margin-top: 5rpx;
+  box-shadow:0 0 5px rgb(107, 111, 112);
+  width: 97%;
+  margin-left: 10rpx;
+  border-radius:10rpx;
 }
 .contain1{
   margin-top: 5rpx;
+}
+.title{
+  text-align:center; /*水平居中*/
 }
 </style>

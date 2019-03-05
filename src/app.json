@@ -7,9 +7,9 @@
   "window": {
     "enablePullDownRefresh": true,
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#58C8DC",
+    "navigationBarBackgroundColor": "#FFFFFF",
     "navigationBarTitleText": "矿山安全监控",
-    "navigationBarTextStyle": "white"
+    "navigationBarTextStyle": "black"
   },
   "usingComponents": {
     "i-row": "/static/iview/row/index",
